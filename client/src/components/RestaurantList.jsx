@@ -50,8 +50,8 @@ export default function RestaurantList() {
         {/* Search */}
         <input
           type="text"
-          placeholder="Search by name or cuisine..."
-          className="w-full border p-3 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-orange-400"
+          placeholder="Search for restaurants and food"
+          className="w-full border border-gray-400 p-3 font-[600] rounded-[4px] mb-4 focus:outline-none"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />

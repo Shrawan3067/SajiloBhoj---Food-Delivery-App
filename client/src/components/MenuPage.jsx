@@ -1,7 +1,8 @@
 // src/pages/MenuPage.jsx
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import paneerbutter from "../assets/paneer_butter.png";
+import { CartContext } from "../context/CartContext";
 
 // Dummy menu data (replace with API later)
 const menuData = {
@@ -95,6 +96,9 @@ const menuData = {
 
 export default function MenuPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { addToCart } = useContext(CartContext);
+
   const [filters, setFilters] = useState({
     veg: false,
     offers: false,
@@ -104,7 +108,7 @@ export default function MenuPage() {
 
   let menuItems = menuData[id] || [];
 
-  // Apply filters
+  // Filters
   menuItems = menuItems.filter((item) => {
     if (filters.veg && !item.veg) return false;
     if (filters.offers && !item.offer) return false;
@@ -113,18 +117,15 @@ export default function MenuPage() {
     return true;
   });
 
-  // Apply sorting
-  if (sort === "lowToHigh") {
-    menuItems.sort((a, b) => a.price - b.price);
-  } else if (sort === "highToLow") {
-    menuItems.sort((a, b) => b.price - a.price);
-  } else if (sort === "bestseller") {
+  // Sorting
+  if (sort === "lowToHigh") menuItems.sort((a, b) => a.price - b.price);
+  else if (sort === "highToLow") menuItems.sort((a, b) => b.price - a.price);
+  else if (sort === "bestseller")
     menuItems.sort((a, b) => b.bestseller - a.bestseller);
-  }
 
   return (
     <div className="max-w-4xl container mx-auto p-6">
-      {/* Restaurant Info (dummy header for now) */}
+      {/* Restaurant Info */}
       <div className="mb-6">
         <h2 className="text-2xl font-bold">Restaurant #{id}</h2>
         <p className="text-gray-600">Delicious meals just for you 🍴</p>
@@ -197,7 +198,7 @@ export default function MenuPage() {
             className="border border-gray-300 rounded-lg p-4 shadow-sm hover:shadow-md"
           >
             <div className="flex justify-between items-start">
-              {/* Text/details on the left */}
+              {/* Details */}
               <div className="flex-1 pr-4">
                 <h3 className="text-lg font-semibold">{item.name}</h3>
                 <p className="text-gray-600">₹{item.price}</p>
@@ -214,18 +215,22 @@ export default function MenuPage() {
                     💸 Special Offer
                   </p>
                 )}
-
-                <p className="text-gray-500">This is a north Indian or Punjabi cuisine parantha recipe that is stuffed with flavoured grated cauliflower.</p>
+                <p className="text-gray-500">
+                  Tasty food description goes here.
+                </p>
               </div>
 
-              {/* Image on the right */}
+              {/* Image + Add */}
               <div className="relative w-40 md:w-42 flex-shrink-0">
                 <img
                   src={paneerbutter}
                   alt=""
                   className="h-30 md:h-38 w-full object-cover rounded-xl"
                 />
-                <button className="absolute bottom-[-16px] left-1/2 transform -translate-x-1/2 px-8 py-2 bg-white border border-gray-500 text-[green] font-[700] rounded-lg hover:bg-gray-200 text-md">
+                <button
+                  onClick={() => addToCart({ ...item, restaurantId: id })}
+                  className="absolute bottom-[-16px] left-1/2 transform -translate-x-1/2 px-8 py-2 bg-white border border-gray-500 text-green-600 font-bold rounded-lg hover:bg-gray-200 text-md"
+                >
                   ADD
                 </button>
               </div>
@@ -233,6 +238,14 @@ export default function MenuPage() {
           </div>
         ))}
       </div>
+
+      {/* Floating View Cart button */}
+      <button
+        onClick={() => navigate("/cart")}
+        className="fixed bottom-6 right-6 bg-orange-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-orange-600"
+      >
+        View Cart 🛒
+      </button>
     </div>
   );
 }

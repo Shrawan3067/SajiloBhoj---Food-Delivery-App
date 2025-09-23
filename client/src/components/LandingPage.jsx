@@ -30,8 +30,8 @@ const LandingPage = () => {
 
 
             <div className="landing-content">
-                <h1 className="font-[700] text-[50px]">Hungry?</h1>
-              <h1 className='font-[700] text-[40px]'>
+                <h1 className="hungry font-[700] text-[50px]">Hungry?</h1>
+              <h1 className='order font-[700] text-[40px]'>
                 Order food & groceries from your <br /> favorite local spots with SajiloBhoj!
               </h1>
               <div className="landing-search">
@@ -46,7 +46,7 @@ const LandingPage = () => {
                   placeholder="Search for restaurant, item or more"
                   className="search-input"
                 />
-                <FiSearch className="text-black-500 mr-2" />
+                <FiSearch className="search-icon text-black-500 mr-2" />
                </div>
                 
               </div>
