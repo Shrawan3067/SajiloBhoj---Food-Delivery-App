@@ -127,11 +127,9 @@ export default function NavBar() {
             >
               <div className="relative">
                 <FaShoppingCart size={18} />
-                {cartCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-orange-600 text-white text-xs px-1 rounded-full">
-                    {cartCount}
+                    {cartCount > 0 ? cartCount : 0}
                   </span>
-                )}
               </div>
               <span>Cart</span>
             </Link>
