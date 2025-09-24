@@ -14,6 +14,7 @@ import {
 import { FiSearch } from "react-icons/fi";
 import { BiSolidOffer } from "react-icons/bi";
 import { CartContext } from "../context/CartContext";
+import '../index.css';
 
 export default function NavBar() {
   const [isLoggedIn] = useState(true);
