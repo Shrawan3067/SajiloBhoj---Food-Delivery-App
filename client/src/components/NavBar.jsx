@@ -221,11 +221,10 @@ export default function NavBar() {
           } hover:text-orange-600`}
         >
           <FaShoppingCart size={20} />
-          {cartCount > 0 && (
+          
             <span className="absolute -top-1 -right-1 bg-orange-600 text-white text-xs px-1 rounded-full">
-              {cartCount}
+              {cartCount > 0 ? cartCount : 0}
             </span>
-          )}
           <span className="text-xs">Cart</span>
         </Link>
       </nav>

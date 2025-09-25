@@ -66,7 +66,7 @@ export default function Profile() {
       {/* Form */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded-lg p-6 w-full max-w-sm space-y-4"
+        className="bg-white border border-gray-100 shadow-md rounded-lg p-6 w-full max-w-sm space-y-4"
       >
         {!isLogin && (
           <input

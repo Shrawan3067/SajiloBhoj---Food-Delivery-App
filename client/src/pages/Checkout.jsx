@@ -81,7 +81,7 @@ export default function Checkout() {
         </div>
 
         {/* Checkout Form */}
-        <div className="bg-white shadow-md rounded-lg p-6">
+        <div className="bg-white shadow-md border border-gray-300 rounded-lg p-6">
           {orderPlaced ? (
             <div className="text-center py-20">
               <h2 className="text-2xl font-bold text-green-500 mb-4">

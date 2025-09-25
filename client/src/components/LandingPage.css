@@ -85,11 +85,8 @@
   .search-input {
     width: 100%;
   }
-  .search-icon {
-    font-size: 20px;
-  }
   .side-image {
-    top: 60px;
+    top: 0px;
     height: 200px;
   }
   .left-image {
@@ -98,53 +95,8 @@
   .right-image {
     right: -20px;
   }
-  .hungry {
-    font-size: 30px;
-  }
-  .order {
-    font-size: 25px;
-  }
 }
 
-.cards-container {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  padding: 50px 10%;
-  flex-wrap: wrap;
-}
-
-.landing-card {
-  background: white;
-  color: #333;
-  width: 350px;
-  padding: 20px;
-  border-radius: 20px;
-  text-align: center;
-  cursor: pointer;
-  position: relative;
-  transition: transform 0.2s;
-}
-
-.landing-card:hover {
-  transform: scale(1.05);
-}
-
-.landing-card h2 {
-  font-size: 2rem;
-  font-weight: 800;
-  font-family: Arial, Helvetica, sans-serif;
-  margin-bottom: 5px;
-  text-align: left;
-}
-
-.landing-card p {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-  color: gray;
-  text-align: left;
-}
 
 .offer {
   display: inline-block;

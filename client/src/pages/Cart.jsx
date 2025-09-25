@@ -27,7 +27,7 @@ export default function Cart() {
           {cart.map((item) => (
             <div
               key={`${item.restaurantId}-${item.id}`}
-              className="p-4 bg-white rounded-xl shadow flex justify-between items-center"
+              className="p-4 bg-white border border-gray-200 rounded-xl shadow flex justify-between items-center"
             >
               <div>
                 <h2 className="font-semibold">{item.name}</h2>

@@ -42,8 +42,8 @@ export default function RestaurantList() {
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="w-7xl p-6">
-        <h2 className="text-2xl font-bold mb-4">
+      <div className="w-full md:w-7xl p-6">
+        <h2 className="md:text-2xl text-[16px] font-bold mb-4">
           Top restaurant chains in Janakpurdham
         </h2>
 
@@ -51,7 +51,7 @@ export default function RestaurantList() {
         <input
           type="text"
           placeholder="Search for restaurants and food"
-          className="w-full border border-gray-400 p-3 font-[600] rounded-[4px] mb-4 focus:outline-none"
+          className="w-full md:w-full border border-gray-400 p-3 font-[600] rounded-[4px] mb-4 focus:outline-none"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -107,7 +107,7 @@ export default function RestaurantList() {
         </div>
 
         {/* Restaurants */}
-        <div className="flex justify-between flex-wrap gap-8">
+        <div className="flex flex-wrap justify-center md:justify-between gap-5">
           {filteredRestaurants.length > 0 ? (
             filteredRestaurants.map((r) => (
               <RestaurantCard key={r.id} restaurant={r} />
