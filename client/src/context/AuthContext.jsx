@@ -1,42 +1,86 @@
-// client/src/context/AuthContext.jsx
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import api from '../services/api';
+// src/context/AuthContext.jsx
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
-const AuthContext = createContext();
+// Create and export the context
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState(() => {
-    const token = localStorage.getItem('token');
-    const user = localStorage.getItem('user');
-    return token && user ? { token, user: JSON.parse(user) } : { token: null, user: null };
-  });
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // login: expects backend to return { token, user }
-  const login = async (credentials) => {
-    const res = await api.post('/auth/login', credentials);
-    const { token, user } = res.data;
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
-    setAuth({ token, user });
-    return res;
+  useEffect(() => {
+    // Check if user is logged in on app start
+    const savedUser = localStorage.getItem('swiggy_user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+    setIsLoading(false);
+  }, []);
+
+  const login = async (emailOrPhone, password) => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Demo authentication - in real app, verify with backend
+    if (password === 'demopassword') {
+      const userData = {
+        id: 1,
+        name: 'Demo User',
+        email: emailOrPhone.includes('@') ? emailOrPhone : null,
+        phone: !emailOrPhone.includes('@') ? emailOrPhone : null,
+        token: 'demo_jwt_token_' + Date.now()
+      };
+      
+      setUser(userData);
+      localStorage.setItem('swiggy_user', JSON.stringify(userData));
+      return userData;
+    } else {
+      throw new Error('Invalid credentials');
+    }
   };
 
-  // signup might return user or token depending on your backend design
-  const signup = async (payload) => {
-    return api.post('/auth/signup', payload);
+  const signup = async (name, emailOrPhone, password) => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    const userData = {
+      id: Date.now(),
+      name,
+      email: emailOrPhone.includes('@') ? emailOrPhone : null,
+      phone: !emailOrPhone.includes('@') ? emailOrPhone : null,
+      token: 'demo_jwt_token_' + Date.now()
+    };
+    
+    setUser(userData);
+    localStorage.setItem('swiggy_user', JSON.stringify(userData));
+    return userData;
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setAuth({ token: null, user: null });
+    setUser(null);
+    localStorage.removeItem('swiggy_user');
+  };
+
+  const value = {
+    user,
+    isLoading,
+    login,
+    signup,
+    logout
   };
 
   return (
-    <AuthContext.Provider value={{ auth, login, signup, logout }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+// Export the hook
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
