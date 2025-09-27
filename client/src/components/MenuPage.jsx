@@ -376,7 +376,7 @@ const FilterButton = ({ label, value, icon, count, mobile = false }) => (
 </div>
 
       {/* Menu Items Grid */}
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto pb-28 px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sortedItems.map((item) => (
             <div
@@ -463,10 +463,10 @@ const FilterButton = ({ label, value, icon, count, mobile = false }) => (
 
       {/* Floating Cart Button */}
       {totalItems > 0 && (
-        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 animate-bounce">
+        <div className="fixed md:bottom-6 bottom-16 left-1/2 transform -translate-x-1/2 z-50 animate-bounce">
           <button
             onClick={() => navigate("/cart")}
-            className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-4 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 flex items-center gap-4 font-bold text-lg"
+            className="bg-gradient-to-r w-[300px] from-green-500 to-emerald-600 text-white md:px-6 px-4 py-2 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 flex items-center gap-4 font-bold text-lg"
           >
             <div className="relative">
               <FaShoppingCart className="text-2xl" />
@@ -478,7 +478,7 @@ const FilterButton = ({ label, value, icon, count, mobile = false }) => (
               <div className="text-sm font-normal">View Cart</div>
               <div>₹{cartTotal}</div>
             </div>
-            <div className="bg-white text-green-600 px-4 py-2 rounded-xl font-bold">
+            <div className="bg-white text-[14px] text-green-600 px-4 py-2 rounded-xl font-bold">
               CHECKOUT →
             </div>
           </button>

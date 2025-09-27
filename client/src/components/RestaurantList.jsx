@@ -120,8 +120,8 @@ export default function RestaurantList() {
               <IoRestaurantOutline className="text-3xl" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold mb-2">Discover Amazing Food</h1>
-              <p className="text-orange-100 text-lg">Top restaurant chains in Janakpurdham</p>
+              <h1 className="md:text-4xl text-[22px] font-bold mb-2">Discover Amazing Food</h1>
+              <p className="text-orange-100 md:text-lg text-[18px]">Top restaurant chains in Janakpurdham</p>
             </div>
           </div>
           
@@ -322,10 +322,10 @@ export default function RestaurantList() {
       </div>
 
       {/* Promotional Banner */}
-      <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-8 mt-8">
+      <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 mt-4 md:py-8 md:mt-8">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <h3 className="text-2xl font-bold mb-2">🚀 Free Delivery on First Order!</h3>
-          <p className="text-green-100">Use code WELCOME50 to get 50% off up to ₹100</p>
+          <h3 className="md:text-2xl text-xl font-bold mb-2">🚀 Free Delivery on First Order!</h3>
+          <p className="text-[14px] text-green-100">Use code WELCOME50 to get 50% off up to ₹100</p>
         </div>
       </div>
 

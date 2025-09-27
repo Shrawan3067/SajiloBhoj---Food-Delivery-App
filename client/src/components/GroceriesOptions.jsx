@@ -101,27 +101,27 @@ const FoodOptionsSection = () => {
 //   const secondRowItems = foodItems.slice(Math.ceil(foodItems.length / 2));
 
   return (
-    <section className="py-16 bg-white relative">
+    <section className="py-8 bg-white relative">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header with Arrows at Top Right */}
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-[19px] md:text-2xl font-bold text-gray-900">
             Groceries at your doorstep
           </h2>
           
           {/* Arrows Container - Top Right */}
-          <div className="flex space-x-3">
+          <div className="flex space-x-2">
             <button 
               onClick={scrollLeft}
               disabled={!showLeftArrow}
-              className={`rounded-full p-2 transition-all duration-200 ${getLeftArrowBgColor()} flex items-center justify-center w-8 h-8`}
+              className={`rounded-full p-2 transition-all duration-200 ${getLeftArrowBgColor()} flex items-center justify-center md:w-8 w-6 md:h-8 h-6`}
             >
               <FaArrowLeft className="text-xl" />
             </button>
             <button 
               onClick={scrollRight}
               disabled={!showRightArrow}
-              className={`rounded-full p-2 transition-all duration-200 ${getRightArrowBgColor()} flex items-center justify-center w-8 h-8`}
+              className={`rounded-full p-2 transition-all duration-200 ${getRightArrowBgColor()} flex items-center justify-center md:w-8 w-6 md:h-8 h-6`}
             >
               <FaArrowRight className="text-xl" />
             </button>

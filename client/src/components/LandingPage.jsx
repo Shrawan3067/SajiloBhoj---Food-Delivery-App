@@ -160,7 +160,7 @@ const LandingPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {/* Food Delivery Card */}
             <div 
-              className="bg-gradient-to-br from-orange-50 to-red-50 rounded-3xl p-8 text-center cursor-pointer group hover:shadow-2xl transition-all duration-300 border-2 border-transparent hover:border-orange-200"
+              className="bg-gradient-to-br from-orange-100 to-red-100 rounded-3xl p-8 text-center cursor-pointer group hover:shadow-2xl transition-all duration-300 border-2 border-transparent hover:border-orange-200"
               onClick={() => navigate('/restaurant-list')}
             >
               <div className="bg-orange-500 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -175,7 +175,7 @@ const LandingPage = () => {
 
             {/* Instamart Card */}
             <div 
-              className="bg-gradient-to-br from-green-50 to-blue-50 rounded-3xl p-8 text-center cursor-pointer group hover:shadow-2xl transition-all duration-300 border-2 border-transparent hover:border-green-200"
+              className="bg-gradient-to-br from-green-100 to-blue-100 rounded-3xl p-8 text-center cursor-pointer group hover:shadow-2xl transition-all duration-300 border-2 border-transparent hover:border-green-200"
               onClick={() => navigate('/instamart')}
             >
               <div className="bg-green-500 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -190,7 +190,7 @@ const LandingPage = () => {
 
             {/* Dineout Card */}
             <div 
-              className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-8 text-center cursor-pointer group hover:shadow-2xl transition-all duration-300 border-2 border-transparent hover:border-purple-200"
+              className="bg-gradient-to-br from-purple-100 to-pink-100 rounded-3xl p-8 text-center cursor-pointer group hover:shadow-2xl transition-all duration-300 border-2 border-transparent hover:border-purple-200"
               onClick={() => navigate('/dineout')}
             >
               <div className="bg-purple-500 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -215,9 +215,9 @@ const LandingPage = () => {
  
 
       {/* Featured Restaurants */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-8 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Featured Restaurants</h2>
+          <h2 className="text-[19px] md:text-2xl font-bold text-left mb-8">Featured Restaurants</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredRestaurants.map(restaurant => (
