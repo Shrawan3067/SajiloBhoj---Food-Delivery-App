@@ -181,22 +181,26 @@ export default function OrderTracking() {
             <div className="flex items-center gap-4">
               <Link 
                 to="/order-history" 
-                className="bg-white/20 p-3 rounded-2xl backdrop-blur-sm hover:bg-white/30 transition-all"
+                className="bg-white/20 md:p-3 p-2 rounded-2xl backdrop-blur-sm hover:bg-white/30 transition-all"
               >
-                <FaArrowLeft className="text-xl" />
+                <FaArrowLeft className="md:text-xl text-sm" />
               </Link>
               <div>
-                <h1 className="text-3xl font-bold mb-1">Track Your Order</h1>
-                <p className="text-orange-100 flex items-center gap-2">
-                  <IoFastFood />
-                  Order #{order.id} • {order.restaurant.name}
+                <h1 className="text-[22px] md:text-3xl font-bold mb-1">Track Your Order</h1>
+                <p className="text-[14px] md:text-[16px] text-orange-100 flex items-center gap-2">
+                  {/* <IoFastFood /> */}
+                  Order #{order.id}
+                </p>
+                <p className="text-[14px] md:text-[16px] text-orange-100 flex items-center gap-2">
+                  {/* <IoFastFood /> */}
+                  {order.restaurant.name}
                 </p>
               </div>
             </div>
             <div className="text-right">
-              <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-3 text-center">
-                <div className="text-2xl font-bold">{timeLeft}</div>
-                <div className="text-orange-200 text-sm">minutes left</div>
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl md:p-3 p-2 text-center">
+                <div className="md:text-2xl text-xl font-bold">{timeLeft}</div>
+                <div className="text-orange-200 md:text-sm text-[12px]">minutes left</div>
               </div>
             </div>
           </div>
@@ -206,7 +210,7 @@ export default function OrderTracking() {
       <div className="max-w-4xl mx-auto px-4 py-8 -mt-4">
         {/* Delivery Status Card */}
         <div className="bg-white rounded-3xl shadow-xl p-6 mb-6">
-          <div className="flex items-center justify-between">
+          <div className="flex md:flex-row flex-col items-center justify-between">
             <div className="flex items-center gap-4">
               <div className={`p-4 rounded-2xl ${
                 isDelivered ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'
@@ -214,7 +218,7 @@ export default function OrderTracking() {
                 {isDelivered ? <FaCheckCircle className="text-3xl" /> : <FaBike className="text-3xl" />}
               </div>
               <div>
-                <h3 className={`text-2xl font-bold ${isDelivered ? 'text-green-600' : 'text-orange-600'}`}>
+                <h3 className={`md:text-2xl text-[18px] font-bold ${isDelivered ? 'text-green-600' : 'text-orange-600'}`}>
                   {isDelivered ? 'Delivered Successfully!' : `Delivery in ${timeLeft} minutes`}
                 </h3>
                 <p className="text-gray-600">
@@ -223,7 +227,7 @@ export default function OrderTracking() {
               </div>
             </div>
             {!isDelivered && (
-              <div className="text-right">
+              <div className="text-right flex md:flex-col md:ml-0 ml-18 items-center flex-row gap-2">
                 <div className="text-sm text-gray-500">Estimated delivery</div>
                 <div className="text-lg font-bold text-gray-900">
                   {new Date(order.estimatedDelivery).toLocaleTimeString('en-IN', { 
@@ -447,7 +451,7 @@ export default function OrderTracking() {
 
         {/* Help Section */}
         {!isDelivered && (
-          <div className="text-center">
+          <div className="text-center mb-12">
             <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-3xl p-6 border-2 border-dashed border-gray-200">
               <FaHeadset className="text-4xl text-gray-400 mx-auto mb-3" />
               <h4 className="font-bold text-gray-700 mb-2">Need help with your order?</h4>

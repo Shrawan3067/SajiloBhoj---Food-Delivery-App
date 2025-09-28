@@ -76,13 +76,13 @@ export default function Cart() {
           </button>
           <div className="flex items-center gap-3">
             <div className="bg-orange-500 p-3 rounded-2xl text-white">
-              <FaShoppingBag className="text-2xl" />
+              <FaShoppingBag className="text-xl md:text-2xl" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Your Cart</h1>
-              <p className="text-gray-600 flex items-center gap-2">
+              <h1 className="md:text-2xl text-xl font-bold text-gray-900">Your Cart</h1>
+              <p className="text-gray-600 md:text-[18px] text-[16px] flex items-center gap-2">
                 <IoFastFood />
-                {totalItems} {totalItems === 1 ? 'item' : 'items'} • From {Object.keys(groupedCart).length} restaurant(s)
+                {totalItems} {totalItems === 1 ? 'item' : 'items'} • From {Object.keys(groupedCart).length} restaurant
               </p>
             </div>
           </div>

@@ -64,13 +64,13 @@ export default function NavBar() {
       <nav className="sticky top-0 w-full bg-white shadow-sm z-50">
         <div className="max-w-7xl mx-auto px-6 py-1 flex justify-between items-center w-full">
 {/* Logo */}
-<Link to="/" className="flex items-center space-x-1 group">
+<Link to="/" className="flex items-center group">
   <div className="relative">
     <div className="absolute rounded-full"></div>
     <img
       src={sajilobhoj_icon}
       alt="SajiloBhoj Logo"
-      className="h-16 object-contain cursor-pointer relative z-10"
+      className="h-18 object-contain cursor-pointer relative z-10"
     />
   </div>
   <div>
@@ -82,7 +82,7 @@ export default function NavBar() {
 </Link>
 
           {/* Search - Hidden on mobile */}
-          <div className="hidden md:flex items-center w-[500px]">
+          <div className="hidden xl:flex items-center w-[500px]">
             <div className="flex w-full items-center bg-gray-50 border border-gray-200 px-3 py-3 rounded-xl">
               <FiSearch className="text-gray-500 mr-2" />
               <input

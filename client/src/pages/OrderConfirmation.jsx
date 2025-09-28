@@ -24,7 +24,7 @@ export default function OrderConfirmation() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="max-w-4xl mx-auto px-4 py-6">
+      {/* <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="flex items-center space-x-3">
             <FaCheckCircle className="text-3xl text-green-500" />
             <div>
@@ -32,12 +32,12 @@ export default function OrderConfirmation() {
               <p className="text-gray-600">Your order has been placed successfully</p>
             </div>
           </div>
-        </div>
+        </div> */}
 
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-sm p-8 text-center mb-6">
           <FaCheckCircle className="text-6xl text-green-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold mb-2">Thank you for your order!</h2>
+          <h2 className="text-2xl font-bold mb-2">Order Confirmed!</h2>
           <p className="text-gray-600 mb-4">Your food is being prepared and will be delivered soon</p>
           
           <div className="bg-gray-50 rounded-lg p-4 max-w-md mx-auto mb-6">

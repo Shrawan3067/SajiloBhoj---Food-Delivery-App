@@ -3,8 +3,18 @@ import React, { useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import paneerbutter from "../assets/paneer_butter.png";
 import { CartContext } from "../context/CartContext";
-import { FaShoppingCart, FaStar, FaFire, FaTag, FaFilter, FaSort } from "react-icons/fa";
-import { IoLeaf, IoFastFood } from "react-icons/io5";
+import { 
+  FaShoppingCart, 
+  FaStar, 
+  FaFire, 
+  FaTag, 
+  FaFilter, 
+  FaSort,
+  FaTimes,
+  FaSearch
+} from "react-icons/fa";
+import { IoFastFood } from "react-icons/io5";
+import { IoLeaf } from "react-icons/io5";
 
 // Dummy menu data (replace with API later)
 const menuData = {
@@ -140,22 +150,52 @@ export default function MenuPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart, cart } = useContext(CartContext);
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [activeFilters, setActiveFilters] = useState([]);
   const [sort, setSort] = useState("relevance");
   const [quantity, setQuantity] = useState({});
+  const [search, setSearch] = useState("");
 
   const restaurant = restaurantInfo[id] || { name: `Restaurant #${id}` };
   let menuItems = menuData[id] || [];
 
-  // Enhanced filtering
+  // Define filters with counts
+  const filters = [
+    { key: "all", label: "All Items", icon: <IoFastFood className="text-orange-500" />, count: menuItems.length },
+    { key: "veg", label: "Pure Veg", icon: <IoLeaf className="text-green-500" />, count: menuItems.filter(item => item.veg).length },
+    { key: "nonveg", label: "Non-Veg", icon: "🍖", count: menuItems.filter(item => !item.veg).length },
+    { key: "offers", label: "Offers", icon: <FaTag className="text-red-500" />, count: menuItems.filter(item => item.offer).length },
+    { key: "bestseller", label: "Bestsellers", icon: <FaFire className="text-orange-500" />, count: menuItems.filter(item => item.bestseller).length },
+    { key: "rating", label: "Rating 4.0+", icon: <FaStar className="text-yellow-500" />, count: menuItems.filter(item => item.rating >= 4.0).length }
+  ];
+
+  // Enhanced filtering with search and multiple active filters
   const filteredItems = menuItems.filter((item) => {
-    switch (activeFilter) {
-      case "veg": return item.veg;
-      case "nonveg": return !item.veg;
-      case "offers": return item.offer;
-      case "bestseller": return item.bestseller;
-      default: return true;
+    // Search filter - check if search term exists in name or description
+    if (search) {
+      const searchTerm = search.toLowerCase();
+      const matchesSearch = 
+        item.name.toLowerCase().includes(searchTerm) ||
+        item.description.toLowerCase().includes(searchTerm);
+      
+      if (!matchesSearch) return false;
     }
+
+    // If no filters active, show all items that match search
+    if (activeFilters.length === 0 || activeFilters.includes("all")) {
+      return true;
+    }
+
+    // Apply AND logic for multiple filters
+    return activeFilters.every(filterKey => {
+      switch (filterKey) {
+        case "veg": return item.veg;
+        case "nonveg": return !item.veg;
+        case "offers": return item.offer;
+        case "bestseller": return item.bestseller;
+        case "rating": return item.rating >= 4.0;
+        default: return true;
+      }
+    });
   });
 
   // Enhanced sorting
@@ -180,38 +220,50 @@ export default function MenuPage() {
     }));
   };
 
-const FilterButton = ({ label, value, icon, count, mobile = false }) => (
-  <button
-    onClick={() => setActiveFilter(activeFilter === value ? "all" : value)}
-    className={`
-      flex items-center gap-2 border-2 transition-all duration-300 font-semibold shrink-0
-      ${mobile 
-        ? `px-3 py-2 rounded-lg text-sm ${activeFilter === value 
-            ? "bg-orange-500 border-orange-500 text-white shadow-lg" 
-            : "bg-white border-gray-200 text-gray-700 hover:border-orange-300"}`
-        : `px-4 py-3 rounded-xl ${activeFilter === value 
-            ? "bg-orange-500 border-orange-500 text-white shadow-lg scale-105" 
-            : "bg-white border-gray-200 text-gray-700 hover:border-orange-300 hover:shadow-md"}`
-      }
-    `}
-  >
-    {icon}
-    <span className={mobile ? "whitespace-nowrap" : ""}>{label}</span>
-    {count > 0 && (
-      <span className={`
-        ${mobile ? "px-1.5 py-0.5 text-xs" : "px-2 py-1 text-xs"}
-        bg-orange-100 text-orange-600 rounded-full
-      `}>
-        {count}
-      </span>
-    )}
-  </button>
-);
+  const FilterButton = ({ filter, mobile = false }) => (
+    <button
+      onClick={() => {
+        if (filter.key === "all") {
+          setActiveFilters([]);
+        } else {
+          // Toggle filter in activeFilters array
+          if (activeFilters.includes(filter.key)) {
+            setActiveFilters(activeFilters.filter(f => f !== filter.key));
+          } else {
+            setActiveFilters([...activeFilters.filter(f => f !== "all"), filter.key]);
+          }
+        }
+      }}
+      className={`flex items-center gap-1 px-3 py-2 rounded-lg border transition-all duration-300 font-semibold shrink-0 text-sm ${
+        activeFilters.includes(filter.key) 
+          ? "bg-orange-500 border-orange-500 text-white" 
+          : "bg-white border-gray-200 text-gray-700 hover:border-orange-300"
+      } ${mobile ? "text-xs px-2 py-1.5" : ""}`}
+    >
+      <span className="text-sm">{filter.icon}</span>
+      <span className="whitespace-nowrap">{filter.label}</span>
+      {filter.count > 0 && (
+        <span className={`px-1.5 py-0.5 rounded text-xs ${
+          activeFilters.includes(filter.key) 
+            ? "bg-orange-400 text-white" 
+            : "bg-orange-100 text-orange-600"
+        }`}>
+          {filter.count}
+        </span>
+      )}
+    </button>
+  );
+
+  // Clear all filters and search
+  const clearAllFilters = () => {
+    setActiveFilters([]);
+    setSearch("");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-orange-50">
       {/* Restaurant Header */}
-      <div className="bg-white shadow-lg">
+      <div className="bg-gradient-to-r from-orange-500 to-red-500 shadow-lg">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
             <img 
@@ -238,145 +290,158 @@ const FilterButton = ({ label, value, icon, count, mobile = false }) => (
             </div>
           </div>
         </div>
-      </div>
-{/* Filters & Sorting Bar */}
-<div className="sticky top-[70px] z-40 bg-white z-40 shadow-sm">
-  <div className="max-w-6xl mx-auto px-4 py-4">
-    
-    {/* Desktop Layout (hidden on mobile) */}
-    <div className="hidden md:flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-      <div className="flex items-center gap-2 text-gray-700">
-        <FaFilter className="text-orange-500" />
-        <span className="font-semibold">Filters:</span>
-      </div>
-      
-      <div className="flex flex-wrap gap-3">
-        <FilterButton 
-          label="All" 
-          value="all" 
-          icon={<IoFastFood />} 
-          count={menuItems.length}
-        />
-        <FilterButton 
-          label="Veg" 
-          value="veg" 
-          icon={<IoLeaf className="text-green-500" />} 
-          count={menuItems.filter(item => item.veg).length}
-        />
-        <FilterButton 
-          label="Non-Veg" 
-          value="nonveg" 
-          icon="🍖" 
-          count={menuItems.filter(item => !item.veg).length}
-        />
-        <FilterButton 
-          label="Offers" 
-          value="offers" 
-          icon={<FaTag className="text-red-500" />} 
-          count={menuItems.filter(item => item.offer).length}
-        />
-        <FilterButton 
-          label="Bestsellers" 
-          value="bestseller" 
-          icon={<FaFire className="text-orange-500" />} 
-          count={menuItems.filter(item => item.bestseller).length}
-        />
-      </div>
-
-      <div className="flex items-center gap-2">
-        <FaSort className="text-orange-500" />
-        <select
-          value={sort}
-          onChange={(e) => setSort(e.target.value)}
-          className="px-4 py-2 border-2 border-gray-200 rounded-xl bg-white focus:border-orange-500 focus:outline-none font-semibold"
-        >
-          <option value="relevance">Relevance</option>
-          <option value="rating">Highest Rating</option>
-          <option value="lowToHigh">Price: Low to High</option>
-          <option value="highToLow">Price: High to Low</option>
-          <option value="bestseller">Bestsellers First</option>
-        </select>
-      </div>
-    </div>
-
-    {/* Mobile Layout (hidden on desktop) */}
-    <div className="md:hidden">
-      {/* Combined Scrollable Row with Filters and Sort */}
-      <div className="flex items-center gap-3 overflow-x-auto pb-3 -mb-3 scrollbar-hide">
-        <div className="flex items-center gap-2 text-gray-700 shrink-0">
-          <FaFilter className="text-orange-500" />
-          <span className="font-semibold text-sm">Filters:</span>
-        </div>
-        
-        <FilterButton 
-          label="All" 
-          value="all" 
-          icon={<IoFastFood />} 
-          count={menuItems.length}
-          mobile={true}
-        />
-        <FilterButton 
-          label="Veg" 
-          value="veg" 
-          icon={<IoLeaf className="text-green-500" />} 
-          count={menuItems.filter(item => item.veg).length}
-          mobile={true}
-        />
-        <FilterButton 
-          label="Non-Veg" 
-          value="nonveg" 
-          icon="🍖" 
-          count={menuItems.filter(item => !item.veg).length}
-          mobile={true}
-        />
-        <FilterButton 
-          label="Offers" 
-          value="offers" 
-          icon={<FaTag className="text-red-500" />} 
-          count={menuItems.filter(item => item.offer).length}
-          mobile={true}
-        />
-        <FilterButton 
-          label="Bestsellers" 
-          value="bestseller" 
-          icon={<FaFire className="text-orange-500" />} 
-          count={menuItems.filter(item => item.bestseller).length}
-          mobile={true}
-        />
-        
-        {/* Sort dropdown inline */}
-        <div className="flex items-center gap-2 shrink-0 pl-2 border-l border-gray-200">
-          <FaSort className="text-orange-500 text-sm" />
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-            className="px-3 py-2 border border-gray-200 rounded-lg bg-white focus:border-orange-500 focus:outline-none font-semibold text-sm"
-          >
-            <option value="relevance">Relevance</option>
-            <option value="rating">Rating</option>
-            <option value="lowToHigh">Price: Low</option>
-            <option value="highToLow">Price: High</option>
-            <option value="bestseller">Bestsellers</option>
-          </select>
+              {/* Search Bar */}
+        <div className="max-w-6xl mx-auto px-4 py-4">
+          <div className="relative max-w-2xl">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <FaSearch className="text-gray-400" />
+            </div>
+            <input
+              type="text"
+              placeholder="Search for dishes, ingredients, or descriptions..."
+              className="w-full pl-12 pr-10 py-3 rounded-xl border-2 border-gray-200 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-orange-50 placeholder-gray-500 focus:outline-none"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            {(search || activeFilters.length > 0) && (
+              <button
+                onClick={clearAllFilters}
+                className="absolute inset-y-0 right-0 pr-4 flex items-center"
+              >
+                <FaTimes className="text-gray-400 hover:text-gray-600 transition-colors" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  {/* Custom scrollbar hide styles */}
-  <style jsx>{`
-    .scrollbar-hide {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-    .scrollbar-hide::-webkit-scrollbar {
-      display: none;
-    }
-  `}</style>
-</div>
+
+
+      {/* Filters & Sorting Bar - Multiple Selection */}
+      <div className="sticky top-[80px] bg-white z-40 shadow-sm border-b">
+        <div className="max-w-6xl mx-auto px-4 py-3">
+          {/* Compact Layout */}
+          <div className="flex flex-col gap-3">
+            {/* Main Row */}
+            <div className="flex items-center gap-3 w-full">
+              {/* Filters Label */}
+              <div className="flex items-center gap-2 text-gray-700 shrink-0">
+                <FaFilter className="text-orange-500 text-sm" />
+                <span className="font-semibold text-sm hidden xs:inline">Filters:</span>
+              </div>
+              
+              {/* Scrollable Filters */}
+              <div className="flex-1 min-w-0">
+                <div className="flex gap-2 overflow-x-auto pb-2 -mb-2 scrollbar-hide">
+                  {filters.map(filter => (
+                    <FilterButton key={filter.key} filter={filter} mobile={true} />
+                  ))}
+                  
+                  {/* Clear All Button */}
+                  {(activeFilters.length > 0 || search) && (
+                    <button
+                      onClick={clearAllFilters}
+                      className="flex items-center gap-1 px-3 py-2 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 transition-all duration-300 font-semibold shrink-0 text-sm"
+                    >
+                      <FaTimes className="text-sm" />
+                      <span className="whitespace-nowrap">Clear All</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Sorting - Compact */}
+              <div className="shrink-0">
+                <select
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value)}
+                  className="px-3 py-2 border border-gray-200 rounded-lg bg-white focus:border-orange-500 focus:outline-none font-semibold text-sm min-w-[120px]"
+                >
+                  <option value="relevance">Relevance</option>
+                  <option value="rating">Rating</option>
+                  <option value="lowToHigh">Price: Low</option>
+                  <option value="highToLow">Price: High</option>
+                  <option value="bestseller">Bestsellers</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Active Filters & Search Indicator */}
+            {(activeFilters.length > 0 || search) && (
+              <div className="flex items-center gap-2 pt-2 border-t border-gray-200 flex-wrap">
+                <span className="text-xs text-gray-600 shrink-0">
+                  Active filters:
+                </span>
+                <div className="flex flex-wrap gap-1">
+                  {/* Search term indicator */}
+                  {search && (
+                    <div className="flex items-center gap-1 bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full text-xs">
+                      <FaSearch className="text-xs" />
+                      <span className="font-semibold">"{search}"</span>
+                      <button
+                        onClick={() => setSearch("")}
+                        className="hover:bg-blue-200 rounded-full p-0.5 transition-colors"
+                      >
+                        <FaTimes className="text-xs" />
+                      </button>
+                    </div>
+                  )}
+                  
+                  {/* Filter indicators */}
+                  {activeFilters.map(filterKey => {
+                    const filter = filters.find(f => f.key === filterKey);
+                    return filter ? (
+                      <div 
+                        key={filterKey}
+                        className="flex items-center gap-1 bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full text-xs"
+                      >
+                        {filter.icon}
+                        <span className="font-semibold">{filter.label}</span>
+                        <button
+                          onClick={() => setActiveFilters(activeFilters.filter(f => f !== filterKey))}
+                          className="hover:bg-orange-200 rounded-full p-0.5 transition-colors"
+                        >
+                          <FaTimes className="text-xs" />
+                        </button>
+                      </div>
+                    ) : null;
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
 
       {/* Menu Items Grid */}
       <div className="max-w-6xl mx-auto pb-28 px-4 py-8">
+        {/* Results Header */}
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">
+              {sortedItems.length} {search ? 'Search Results' : 'Dishes Available'}
+            </h2>
+            <p className="text-gray-600 flex items-center gap-2 mt-1">
+              <IoFastFood className="text-orange-500" />
+              {restaurant.name} • {restaurant.deliveryTime} delivery
+            </p>
+          </div>
+          
+          {/* Quick Stats */}
+          <div className="hidden md:flex items-center gap-6 text-sm text-gray-600">
+            <div className="text-center">
+              <div className="font-bold text-2xl text-orange-500">{menuItems.length}</div>
+              <div>Total Dishes</div>
+            </div>
+            <div className="text-center">
+              <div className="font-bold text-2xl text-green-500">
+                {menuItems.filter(item => item.veg).length}
+              </div>
+              <div>Veg Options</div>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sortedItems.map((item) => (
             <div
@@ -453,10 +518,23 @@ const FilterButton = ({ label, value, icon, count, mobile = false }) => (
         </div>
 
         {sortedItems.length === 0 && (
-          <div className="text-center py-16">
-            <div className="text-6xl mb-4">🍕</div>
-            <h3 className="text-2xl font-bold text-gray-600 mb-2">No items found</h3>
-            <p className="text-gray-500">Try changing your filters to see more options</p>
+          <div className="text-center py-16 bg-white rounded-3xl shadow-lg">
+            <div className="text-6xl mb-4">🔍</div>
+            <h3 className="text-2xl font-bold text-gray-700 mb-2">
+              {search ? 'No dishes found' : 'No dishes match your filters'}
+            </h3>
+            <p className="text-gray-500 mb-6">
+              {search 
+                ? `No dishes found for "${search}". Try different keywords.`
+                : 'Try adjusting your filters to see more options'
+              }
+            </p>
+            <button
+              onClick={clearAllFilters}
+              className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-xl font-bold hover:from-orange-600 hover:to-red-600 transition-all"
+            >
+              {search ? 'Clear Search' : 'Clear Filters'}
+            </button>
           </div>
         )}
       </div>
@@ -485,8 +563,15 @@ const FilterButton = ({ label, value, icon, count, mobile = false }) => (
         </div>
       )}
 
-      {/* Add custom styles for line clamping */}
+      {/* Custom scrollbar hide styles */}
       <style jsx>{`
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
         .line-clamp-1 { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; }
         .line-clamp-2 { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
       `}</style>

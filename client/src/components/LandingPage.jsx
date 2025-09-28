@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FiSearch, FiClock, FiStar, FiShoppingBag } from "react-icons/fi";
 import { TfiLocationPin } from "react-icons/tfi";
 import { FaUtensils, FaShoppingBasket, FaStore, FaMotorcycle, FaShieldAlt } from "react-icons/fa";
+import FeaturedRestaurantsSection from './FeaturedRestaurantsSection';
 
 // Side decorative images
 import leftImage from '../assets/Veggies_new.png';
@@ -91,7 +92,7 @@ const LandingPage = () => {
             <h1 className="font-bold text-4xl md:text-6xl lg:text-7xl text-white mb-4">
               Hungry?
             </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-8 max-w-4xl mx-auto leading-tight">
+            <p className="text-[22px] md:text-2xl lg:text-3xl font-semibold text-white mb-8 max-w-4xl mx-auto leading-tight">
               Order food & groceries from your favorite local spots with SajiloBhoj!
             </p>
 
@@ -155,7 +156,7 @@ const LandingPage = () => {
            {/* Rest of your existing sections... */}
       <section className="py-16 bg-gradient-to-b from-orange-50 to-white">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">What would you like to do today?</h2>
+          <h2 className="text-xl md:text-4xl font-bold text-center mb-12">What would you like to do today?</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {/* Food Delivery Card */}
@@ -214,8 +215,7 @@ const LandingPage = () => {
 
  
 
-      {/* Featured Restaurants */}
-      <section className="py-8 bg-gray-50">
+      {/* <section className="py-8 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-[19px] md:text-2xl font-bold text-left mb-8">Featured Restaurants</h2>
           
@@ -257,12 +257,14 @@ const LandingPage = () => {
             </button>
           </div>
         </div>
-      </section>
+      </section> */}
+
+      <FeaturedRestaurantsSection featuredRestaurants={featuredRestaurants} />
 
       {/* Features Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Why Choose SajiloBhoj?</h2>
+          <h2 className="text-2xl md:text-4xl font-bold text-center mb-12">Why Choose SajiloBhoj?</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">

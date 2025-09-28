@@ -113,7 +113,7 @@ export default function RestaurantList() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-orange-50">
       {/* Hero Header */}
-      <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white py-12">
+      <div className="bg-gradient-to-r from-orange-500 to-red-500 py-12">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center gap-4 mb-4">
             <div className="bg-white/20 p-3 rounded-2xl backdrop-blur-sm">
@@ -128,12 +128,12 @@ export default function RestaurantList() {
           {/* Search Bar */}
           <div className="relative max-w-2xl">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <FaSearch className="text-black z-10" />
+              <FaSearch className="text-gray-400" />
             </div>
             <input
               type="text"
               placeholder="Search for restaurants, cuisines, or dishes..."
-              className="w-full pl-12 pr-4 py-4 rounded-2xl border-0 focus:ring-4 focus:ring-white/20 bg-orange-100 backdrop-blur-sm placeholder-gray-500 text-black focus:outline-none text-lg"
+              className="w-full pl-12 pr-10 py-3 rounded-xl border-2 border-gray-200 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-orange-50 placeholder-gray-500 focus:outline-none"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -150,7 +150,7 @@ export default function RestaurantList() {
       </div>
 
 {/* Filters & Sorting Bar - Multiple Selection */}
-<div className="sticky top-[70px] bg-white z-40 shadow-sm border-b">
+<div className="sticky top-[80px] bg-white z-40 shadow-sm border-b">
   <div className="max-w-7xl mx-auto px-4 py-3">
     {/* Compact Layout for very small screens */}
     <div className="flex flex-col gap-3">
@@ -289,7 +289,7 @@ export default function RestaurantList() {
 
         {/* Restaurant Grid */}
         {filteredRestaurants.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="flex md:justify-between justify-center flex-wrap gap-6">
             {filteredRestaurants.map((restaurant) => (
               <RestaurantCard key={restaurant.id} restaurant={restaurant} />
             ))}
