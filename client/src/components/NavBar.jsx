@@ -9,7 +9,8 @@ import {
   FaHandshake,
   FaHome,
   FaTimes,
-  FaSignOutAlt
+  FaSignOutAlt,
+  FaBars,
 } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 import { BiSolidOffer } from "react-icons/bi";
@@ -25,8 +26,10 @@ export default function NavBar() {
   const location = useLocation();
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const searchRef = useRef(null);
   const userMenuRef = useRef(null);
+  const mobileMenuRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -36,9 +39,19 @@ export default function NavBar() {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
         setShowUserMenu(false);
       }
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+        setShowMobileMenu(false);
+      }
     };
+
+    // Add both mouse and touch events
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
   }, []);
 
   const isActive = (path) => location.pathname === path;
@@ -46,15 +59,27 @@ export default function NavBar() {
   const handleLogout = () => {
     logout();
     setShowUserMenu(false);
-    navigate('/');
+    setShowMobileMenu(false);
+    navigate("/");
   };
 
   const handleProfileClick = () => {
     if (user) {
-      navigate('/profile');
+      navigate("/profile");
     } else {
-      navigate('/login');
+      navigate("/login");
     }
+    setShowUserMenu(false);
+    setShowMobileMenu(false);
+  };
+
+  const handleUserMenuToggle = () => {
+    setShowUserMenu(!showUserMenu);
+    setShowMobileMenu(false);
+  };
+
+  const handleMobileMenuToggle = () => {
+    setShowMobileMenu(!showMobileMenu);
     setShowUserMenu(false);
   };
 
@@ -63,23 +88,33 @@ export default function NavBar() {
       {/* Desktop Nav - fixed at top */}
       <nav className="sticky top-0 w-full bg-white shadow-sm z-50">
         <div className="max-w-7xl mx-auto px-6 py-1 flex justify-between items-center w-full">
-{/* Logo */}
-<Link to="/" className="flex items-center group">
-  <div className="relative">
-    <div className="absolute rounded-full"></div>
-    <img
-      src={sajilobhoj_icon}
-      alt="SajiloBhoj Logo"
-      className="h-18 object-contain cursor-pointer relative z-10"
-    />
-  </div>
-  <div>
-    <span className="text-[22px] font-bold text-gray-900">
-      Sajilo<span className="text-orange-500">Bhoj</span>
-    </span>
-    <span className="text-xs text-gray-500 font-[500] block -mt-1">Quick & Delicious</span>
-  </div>
-</Link>
+          {/* Logo */}
+          <Link to="/" className="flex items-center group">
+            <div className="relative">
+              <div className="absolute rounded-full"></div>
+              <img
+                src={sajilobhoj_icon}
+                alt="SajiloBhoj Logo"
+                className="h-18 object-contain cursor-pointer relative z-10"
+              />
+            </div>
+            <div>
+              <span className="text-[22px] font-bold text-gray-900">
+                Sajilo<span className="text-orange-500">Bhoj</span>
+              </span>
+              <span className="text-xs text-gray-500 font-[500] block -mt-1">
+                Quick & Delicious
+              </span>
+            </div>
+          </Link>
+
+          {/* Mobile Menu Button - Hidden on desktop */}
+          <button
+            className="md:hidden flex items-center p-2"
+            onClick={handleMobileMenuToggle}
+          >
+            <FaBars size={26} className="text-gray-700" />
+          </button>
 
           {/* Search - Hidden on mobile */}
           <div className="hidden xl:flex items-center w-[500px]">
@@ -93,7 +128,7 @@ export default function NavBar() {
             </div>
           </div>
 
-          {/* Links - Hidden on mobile */}
+          {/* Desktop Links - Hidden on mobile */}
           <div className="hidden md:flex items-center space-x-6">
             <Link
               to="/partner-with-us"
@@ -133,7 +168,7 @@ export default function NavBar() {
             <div className="relative" ref={userMenuRef}>
               {user ? (
                 <button
-                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  onClick={handleUserMenuToggle}
                   className={`flex items-center space-x-2 cursor-pointer ${
                     isActive("/profile")
                       ? "text-orange-600 font-semibold"
@@ -141,12 +176,16 @@ export default function NavBar() {
                   } hover:text-orange-600 transition-colors duration-200`}
                 >
                   <FaUserAlt />
-                  <span>{user.name.split(' ')[0]}</span>
+                  <span>{user.name.split(" ")[0]}</span>
                 </button>
               ) : (
                 <Link
                   to="/login"
-                  className="text-sm font-medium text-orange-600 hover:underline flex items-center space-x-2 transition-colors duration-200"
+                  className={`flex items-center space-x-1 ${
+                isActive("/login")
+                  ? "text-orange-600 font-semibold"
+                  : "text-gray-700"
+              } hover:text-orange-600 transition-colors duration-200`}
                 >
                   <FaUserAlt />
                   <span>Login</span>
@@ -157,8 +196,12 @@ export default function NavBar() {
               {showUserMenu && user && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                   <div className="px-4 py-2 border-b border-gray-100">
-                    <p className="text-sm font-medium text-gray-900">{user.name}</p>
-                    <p className="text-xs text-gray-500 truncate">{user.email || user.phone}</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      {user.name}
+                    </p>
+                    <p className="text-xs text-gray-500 truncate">
+                      {user.email || user.phone}
+                    </p>
                   </div>
                   <button
                     onClick={handleProfileClick}
@@ -188,17 +231,98 @@ export default function NavBar() {
             >
               <div className="relative">
                 <FaShoppingCart size={18} />
-                
-                  <span className="absolute -top-2 -right-2 bg-orange-600 text-white text-xs px-1 rounded-full min-w-[18px] text-center">
-                    {cartCount > 0 ? cartCount : 0}
-                  </span>
-                
+                <span className="absolute -top-2 -right-2 bg-orange-600 text-white text-xs px-1 rounded-full min-w-[18px] text-center">
+                  {cartCount > 0 ? cartCount : 0}
+                </span>
               </div>
               <span>Cart</span>
             </Link>
           </div>
         </div>
       </nav>
+
+      {/* Mobile Slide-down Menu */}
+      {showMobileMenu && (
+        <div
+          ref={mobileMenuRef}
+          className="fixed top-0 left-0 w-full bg-white z-50 p-4 shadow-md animate-slideDown md:hidden"
+        >
+          <div className="flex justify-between items-center mb-4">
+            <span className="text-lg font-bold">Menu</span>
+            <button
+              onClick={() => setShowMobileMenu(false)}
+              className="p-2 hover:bg-gray-100 rounded transition-colors duration-200"
+            >
+              <FaTimes size={20} className="text-gray-700" />
+            </button>
+          </div>
+          
+          {/* Mobile User Section */}
+          <div className="border-b border-gray-200 pb-4 mb-4">
+            {user ? (
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                  <FaUserAlt className="text-orange-600" />
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900">{user.name}</p>
+                  <p className="text-xs text-gray-500">{user.email || user.phone}</p>
+                </div>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                onClick={() => setShowMobileMenu(false)}
+                className="flex items-center space-x-3 text-orange-600 font-medium"
+              >
+                <FaUserAlt />
+                <span>Login / Sign Up</span>
+              </Link>
+            )}
+          </div>
+
+          {/* Mobile Menu Links */}
+          <div className="space-y-2">
+            <Link
+              to="/profile"
+              onClick={() => setShowMobileMenu(false)}
+              className="block py-3 px-4 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+            >
+              My Profile
+            </Link>
+            <Link
+              to="/partner-with-us"
+              onClick={() => setShowMobileMenu(false)}
+              className="block py-3 px-4 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+            >
+              Partner with Us
+            </Link>
+            <Link
+              to="/offers"
+              onClick={() => setShowMobileMenu(false)}
+              className="block py-3 px-4 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+            >
+              Offers
+            </Link>
+            <Link
+              to="/help"
+              onClick={() => setShowMobileMenu(false)}
+              className="block py-3 px-4 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+            >
+              Help
+            </Link>
+            {user && (
+              <button
+                onClick={handleLogout}
+                className="w-full text-left py-3 px-4 hover:bg-gray-100 rounded-lg flex items-center space-x-2 transition-colors duration-200 text-red-600"
+              >
+                <FaSignOutAlt size={14} />
+                <span>Logout</span>
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Mobile Slide-down Search */}
       {mobileSearchOpen && (
@@ -215,7 +339,7 @@ export default function NavBar() {
               />
               <FiSearch size={20} className="text-gray-700" />
             </div>
-            <button 
+            <button
               onClick={() => setMobileSearchOpen(false)}
               className="p-2 hover:bg-gray-100 rounded transition-colors duration-200"
             >
@@ -252,34 +376,16 @@ export default function NavBar() {
           <BiSolidOffer size={20} />
           <span className="text-xs mt-1">Offers</span>
         </Link>
-        <Link
-          to="/partner-with-us"
-          className={`flex flex-col items-center p-2 ${
-            isActive("/partner-with-us") ? "text-orange-600" : "text-gray-700"
-          } hover:text-orange-600 transition-colors duration-200`}
-        >
-          <FaHandshake size={20} />
-          <span className="text-xs mt-1">Partner</span>
-        </Link>
-        <Link
-          to="/help"
-          className={`flex flex-col items-center p-2 ${
-            isActive("/help") ? "text-orange-600" : "text-gray-700"
-          } hover:text-orange-600 transition-colors duration-200`}
-        >
-          <FaQuestionCircle size={20} />
-          <span className="text-xs mt-1">Help</span>
-        </Link>
         
-        {/* Mobile Profile - Redirects to login if not authenticated */}
+        {/* Mobile User Profile */}
         <button
-          onClick={handleProfileClick}
+          onClick={handleMobileMenuToggle}
           className={`flex flex-col items-center p-2 ${
-            isActive("/profile") || isActive("/login") ? "text-orange-600" : "text-gray-700"
+            isActive("/profile") ? "text-orange-600" : "text-gray-700"
           } hover:text-orange-600 transition-colors duration-200`}
         >
           <FaUserAlt size={20} />
-          <span className="text-xs mt-1">{user ? "Profile" : "Login"}</span>
+          <span className="text-xs mt-1">{user ? "Account" : "Login"}</span>
         </button>
 
         {/* Mobile Cart */}

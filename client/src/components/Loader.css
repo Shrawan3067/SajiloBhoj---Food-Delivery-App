@@ -1,11 +1,11 @@
-/* components/Loader.css */
+/* Loader.css */
 .loader-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ff6b35 100%);
+  background-color: #ff5200;
   background-size: 400% 400%;
   display: flex;
   justify-content: center;
@@ -27,59 +27,69 @@
   animation: fadeInUp 0.8s ease-out;
 }
 
-.food-loader {
-  margin-bottom: 30px;
-}
 
 .plate {
-  width: 100px;
-  height: 100px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
+  width: 120px;
+  height: 120px;
   position: relative;
   margin: 0 auto;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  animation: rotatePlate 4s linear infinite;
+  overflow: hidden;
 }
 
 .food-item {
   position: absolute;
-  border-radius: 50%;
-  animation: bounce 1.5s infinite ease-in-out;
+  width: 120px;
+  height: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 2s ease;
 }
 
+.food-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.food-item.active {
+  opacity: 1;
+  visibility: visible;
+  animation: slideUp 2s ease-out;
+}
+
+/* Individual item positioning */
 .food-item.biryani {
-  width: 30px;
-  height: 30px;
-  top: 10px;
-  left: 32px;
-  animation-delay: 0s;
+  bottom: -10px;
 }
 
 .food-item.pizza {
-  width: 30px;
-  height: 30px;
-  top: 50px;
-  left: 20px;
-  animation-delay: 0.2s;
+  bottom: -10px;
 }
 
 .food-item.burger {
-  width: 28px;
-  height: 28px;
-  top: 50px;
-  left: 50px;
-  animation-delay: 0.4s;
+  bottom: -10px;
 }
 
-@keyframes rotatePlate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-15px) scale(1.1); }
+@keyframes slideUp {
+  0% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 0;
+  }
+  20% {
+    transform: translateX(-50%) translateY(-40px);
+    opacity: 1;
+  }
+  80% {
+    transform: translateX(-50%) translateY(-40px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) translateY(-80px);
+    opacity: 0;
+  }
 }
 
 @keyframes fadeInUp {
@@ -134,4 +144,3 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0.8; }
 }
-

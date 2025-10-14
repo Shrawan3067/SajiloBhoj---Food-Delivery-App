@@ -176,6 +176,7 @@ const handlePlaceOrder = async () => {
                     onChange={handleInputChange}
                     className="w-full pl-10 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                     placeholder="Enter your full name"
+                    required
                   />
                 </div>
               </div>

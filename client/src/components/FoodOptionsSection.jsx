@@ -6,37 +6,33 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import Biryani from "../assets/Biryani.png";
 import Burger from "../assets/Burger.png";
 import Pizza from "../assets/Pizza.png";
+import Cake from "../assets/Cake.png"
+import Chhole_Bhature from "../assets/Chole_Bhature.png"
+import Paratha from "../assets/paratha.png"
+import Pastry from "../assets/Pastry.png"
+import Poori from "../assets/Poori.png"
+import Rasmalai from "../assets/Rasmalai.png"
+import Momo from "../assets/momo.png"
+import Samosa from "../assets/Samosa.png"
+import Icecream from "../assets/ice Cream.png"
+import Roll from "../assets/Roll.png"
 
 const FoodOptionsSection = () => {
   const foodItems = [
     { name: "Biryani", image: Biryani },
     { name: "Burger", image: Burger },
-    { name: "Pizza", image: Pizza },
-    { name: "Parotta", image: Biryani },
-    { name: "Idli", image: Burger },
-    { name: "Paratha", image: Pizza },
-    { name: "Pure Veg", image: Biryani },
-    { name: "Tea", image: Biryani },
-    { name: "Juice", image: Biryani },
-    { name: "Vada", image: Biryani },
-    { name: "Coffee", image: Biryani },
-    { name: "Poha", image: Biryani },
-    { name: "Poori", image: Biryani },
-    { name: "Omelette", image: Biryani },
-    { name: "Biryani", image: Biryani },
-    { name: "Burger", image: Burger },
-    { name: "Pizza", image: Pizza },
-    { name: "Parotta", image: Biryani },
-    { name: "Idli", image: Burger },
-    { name: "Paratha", image: Pizza },
-    { name: "Pure Veg", image: Biryani },
-    { name: "Tea", image: Biryani },
-    { name: "Juice", image: Biryani },
-    { name: "Vada", image: Biryani },
-    { name: "Coffee", image: Biryani },
-    { name: "Poha", image: Biryani },
-    { name: "Poori", image: Biryani },
-    { name: "Omelette", image: Biryani }
+     { name: "Pizza", image: Pizza },
+    { name: "Roll", image: Roll },
+    { name: "Samosa", image: Samosa },
+    { name: "Momo", image: Momo },
+    { name: "Paratha", image: Paratha },
+    { name: "Chhole_Bhature", image: Chhole_Bhature },
+    { name: "Poori", image: Poori },
+    { name: "Ice Cream", image: Icecream },
+    { name: "Cake", image: Cake },
+    { name: "Pastry", image: Pastry },
+    { name: "Rasmalai", image: Rasmalai },
+    { name: "Biryani", image: Biryani }
   ];
 
   const scrollContainerRef = useRef(null);
@@ -144,7 +140,7 @@ const FoodOptionsSection = () => {
                   className="flex-shrink-0 w-40 bg-white cursor-pointer group"
                 >
                   {/* Food Image */}
-                  <div className="h-45 rounded-t-2xl overflow-hidden">
+                  <div className="h-45 overflow-hidden">
                     <img 
                       src={item.image} 
                       alt={item.name}
@@ -164,7 +160,7 @@ const FoodOptionsSection = () => {
                   className="flex-shrink-0 w-40 bg-white cursor-pointer group"
                 >
                   {/* Food Image */}
-                  <div className="h-45 rounded-t-2xl overflow-hidden">
+                  <div className="h-45 overflow-hidden">
                     <img 
                       src={item.image} 
                       alt={item.name}

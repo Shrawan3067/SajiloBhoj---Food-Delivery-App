@@ -272,21 +272,21 @@ export default function MenuPage() {
               className="w-24 h-24 md:w-32 md:h-32 rounded-2xl object-cover shadow-lg"
             />
             <div className="flex-1">
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
                 {restaurant.name}
               </h1>
-              <div className="flex flex-wrap items-center gap-4 text-gray-600 mb-3">
+              <div className="flex flex-wrap items-center gap-4 text-black mb-3">
                 <span className="flex items-center gap-1 bg-green-100 px-3 py-1 rounded-full">
                   <FaStar className="text-yellow-500" />
                   <span className="font-semibold">{restaurant.rating}</span>
                 </span>
-                <span className="flex items-center gap-1">
-                  <IoFastFood className="text-orange-500" />
+                <span className="flex items-center gap-1 text-white/90">
+                  <IoFastFood />
                   {restaurant.deliveryTime}
                 </span>
-                <span>{restaurant.cuisine}</span>
+                <span className="text-white/90">{restaurant.cuisine}</span>
               </div>
-              <p className="text-gray-500">Free delivery above ₹299 • 100+ ratings</p>
+              <p className="text-white/90">Free delivery above ₹299 • 100+ ratings</p>
             </div>
           </div>
         </div>
@@ -442,7 +442,7 @@ export default function MenuPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {sortedItems.map((item) => (
             <div
               key={item.id}

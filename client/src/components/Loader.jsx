@@ -1,19 +1,41 @@
-// components/Loader.jsx
-import React from 'react';
+// Loader.jsx
+import React, { useState, useEffect } from 'react';
 import './Loader.css';
-import Biryani from '../assets/Biryani.png'
-import Pizza from '../assets/Pizza.png'
-import Burger from '../assets/Burger.png'
+import Biryani from '../assets/Biryani.png';
+import Pizza from '../assets/Pizza.png';
+import Burger from '../assets/Burger.png';
 
 const Loader = () => {
+  const [activeItem, setActiveItem] = useState(0);
+  const foodItems = [
+    { id: 0, src: Burger, alt: 'Burger', className: 'burger' },
+    { id: 1, src: Pizza, alt: 'Pizza', className: 'pizza' },
+    { id: 2, src: Biryani, alt: 'Biryani', className: 'biryani' }
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveItem((prev) => (prev + 1) % foodItems.length);
+    }, 800); // Change item every 800ms
+
+    return () => clearInterval(interval);
+  }, [foodItems.length]);
+
   return (
     <div className="loader-overlay">
       <div className="loader-content">
         <div className="food-loader">
           <div className="plate">
-            <div className="food-item biryani"><img src={Burger} alt="" /></div>
-            <div className="food-item pizza"><img src={Pizza} alt="" /></div>
-            <div className="food-item burger"><img src={Biryani} alt="" /></div>
+            {foodItems.map((item) => (
+              <div
+                key={item.id}
+                className={`food-item ${item.className} ${
+                  activeItem === item.id ? 'active' : ''
+                }`}
+              >
+                <img src={item.src} alt={item.alt} />
+              </div>
+            ))}
           </div>
         </div>
         <h2 className="loader-title">Sajilo Bhoj</h2>

@@ -102,7 +102,7 @@ const FeaturedRestaurantsSection = ({ featuredRestaurants }) => {
                 className="flex-shrink-0 w-80 bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300"
                 onClick={() => navigate(`/menu/${restaurant.id}`)}
               >
-                <div className="h-40 bg-gradient-to-r from-orange-400 to-red-400 relative">
+                <div className="h-40 bg-cover bg-center relative" style={{ backgroundImage: `url(${restaurant.image})` }}>
                   <div className="absolute top-3 right-3 bg-white px-2 py-1 rounded-full text-sm font-semibold flex items-center">
                     <FiStar className="text-yellow-400 mr-1" />
                     {restaurant.rating}

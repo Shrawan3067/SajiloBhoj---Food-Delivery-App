@@ -114,13 +114,13 @@ export default function RestaurantList() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-orange-50">
       {/* Hero Header */}
       <div className="bg-gradient-to-r from-orange-500 to-red-500 py-12">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-6xl md:px-6 p-4 mx-auto">
           <div className="flex items-center gap-4 mb-4">
-            <div className="bg-white/20 p-3 rounded-2xl backdrop-blur-sm">
+            <div className="bg-white/40 p-4 rounded-2xl backdrop-blur-sm">
               <IoRestaurantOutline className="text-3xl" />
             </div>
             <div>
-              <h1 className="md:text-4xl text-[22px] font-bold mb-2">Discover Amazing Food</h1>
+              <h1 className="md:text-4xl text-[22px] font-bold mb-2 text-white">Discover Amazing Food</h1>
               <p className="text-orange-100 md:text-lg text-[18px]">Top restaurant chains in Janakpurdham</p>
             </div>
           </div>
@@ -151,7 +151,7 @@ export default function RestaurantList() {
 
 {/* Filters & Sorting Bar - Multiple Selection */}
 <div className="sticky top-[80px] bg-white z-40 shadow-sm border-b">
-  <div className="max-w-7xl mx-auto px-4 py-3">
+  <div className="max-w-6xl mx-auto md:px-6 p-4 py-3">
     {/* Compact Layout for very small screens */}
     <div className="flex flex-col gap-3">
       {/* Main Row */}
@@ -259,7 +259,7 @@ export default function RestaurantList() {
 </div>
 
       {/* Results Section */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto md:px-6 p-4 py-8">
         {/* Results Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
@@ -289,7 +289,7 @@ export default function RestaurantList() {
 
         {/* Restaurant Grid */}
         {filteredRestaurants.length > 0 ? (
-          <div className="flex md:justify-between justify-center flex-wrap gap-6">
+          <div className="flex md:justify-start justify-center flex-wrap gap-6">
             {filteredRestaurants.map((restaurant) => (
               <RestaurantCard key={restaurant.id} restaurant={restaurant} />
             ))}

@@ -144,7 +144,7 @@ const FoodOptionsSection = () => {
                   className="flex-shrink-0 w-40 bg-white cursor-pointer group"
                 >
                   {/* Food Image */}
-                  <div className="h-50 rounded-t-2xl overflow-hidden">
+                  <div className="h-52 overflow-hidden">
                     <img 
                       src={item.image} 
                       alt={item.name}

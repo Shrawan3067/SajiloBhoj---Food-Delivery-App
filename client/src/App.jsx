@@ -30,7 +30,7 @@ function Layout() {
   const location = useLocation();
 
   // Hide footer on MenuPage and other pages where it's not needed
-  const hideFooterRoutes = ['/menu', '/checkout', '/order-history', '/track-order']; 
+  const hideFooterRoutes = ['/menu', '/order-history', '/track-order']; 
   const shouldHideFooter = hideFooterRoutes.some(path =>
     location.pathname.startsWith(path)
   );

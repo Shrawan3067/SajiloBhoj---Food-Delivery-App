@@ -4,15 +4,15 @@ import { Link } from "react-router-dom";
 export default function RestaurantCard({ restaurant }) {
   return (
     <Link to={`/menu/${restaurant.id}`}>
-      <div className="rounded-xl hover:scale-95 transition-transform duration-300 w-64 relative">
+      <div className="rounded-xl bg-white shadow-lg hover:shadow-xl p-2 w-64 relative">
         <div className="relative">
           <img
             src={restaurant.image}
             alt={restaurant.name}
-            className="h-40 w-full object-cover rounded-lg"
+            className="h-50 w-full object-cover rounded-2xl"
           />
           {/* Bottom shadow overlay */}
-          <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-black/100 to-transparent rounded-b-lg"></div>
+          <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-t from-black/100 to-transparent rounded-b-2xl"></div>
 
           {restaurant.offer && (
             <div className="absolute text-white text-[18px] font-[800] px-2 py-1 rounded-md mt-[-40px] ml-1">
