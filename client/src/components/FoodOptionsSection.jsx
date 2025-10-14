@@ -14,7 +14,7 @@ import Poori from "../assets/Poori.png"
 import Rasmalai from "../assets/Rasmalai.png"
 import Momo from "../assets/momo.png"
 import Samosa from "../assets/Samosa.png"
-import Icecream from "../assets/ice Cream.png"
+import Icecream from "../assets/ice_cream.png"
 import Roll from "../assets/Roll.png"
 
 const FoodOptionsSection = () => {
