@@ -26,6 +26,7 @@ import OrderTracking from './pages/OrderTracking';
 import OrderConfirmation from './pages/OrderConfirmation';
 import Loader from './components/Loader'; // Import the loader
 
+
 function Layout() {
   const location = useLocation();
 
