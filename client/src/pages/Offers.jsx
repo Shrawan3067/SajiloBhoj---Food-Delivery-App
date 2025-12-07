@@ -71,7 +71,7 @@ const Offers = () => {
       id: 1,
       title: "FLAT ₹100 OFF",
       description: "On orders above ₹299",
-      code: "SAJILO100",
+      code: "BITE100",
       validity: "Valid till 31 Dec 2024",
       terms: "Valid on prepaid orders only",
       category: "promo",
@@ -97,7 +97,7 @@ const Offers = () => {
       description: "On all grocery orders",
       code: "FREEDEL",
       validity: "Valid till 25 Dec 2024",
-      terms: "Above ₹299 on Sajilo Mart",
+      terms: "Above ₹299 on Xpress Mart",
       category: "freebies",
       icon: <FiShoppingBag className="text-3xl" />,
       bgColor: "bg-gradient-to-br from-green-400 to-emerald-500",
@@ -545,11 +545,11 @@ const Offers = () => {
             </li>
             <li className="flex items-start gap-2">
               <span className="text-orange-500 mt-1">•</span>
-              <span>SajiloBhoj reserves the right to modify or cancel offers</span>
+              <span>BiteXpress reserves the right to modify or cancel offers</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-orange-500 mt-1">•</span>
-              <span>In case of any dispute, SajiloBhoj's decision will be final</span>
+              <span>In case of any dispute, BiteXpress's decision will be final</span>
             </li>
           </ul>
         </div>

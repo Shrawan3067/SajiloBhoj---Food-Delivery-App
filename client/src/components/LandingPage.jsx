@@ -90,103 +90,235 @@ const LandingPage = () => {
     getApproximateLocation();
   }, []);
 
-  // Function to get approximate location based on IP
-  const getApproximateLocation = async () => {
-    try {
-      const response = await fetch("https://ipapi.co/json/");
-      const data = await response.json();
-      
-      if (data.city && data.country_name) {
-        const approximateLocation = `${data.city}, ${data.country_name}`;
-        setLocation(approximateLocation);
-        localStorage.setItem("userLocation", approximateLocation);
-      }
-    } catch (error) {
-      console.log("Could not get approximate location:", error);
-    }
-  };
+  
 
   // Function to detect precise location using Geolocation API
-  const detectCurrentLocation = () => {
-    setIsDetectingLocation(true);
-    setLocationError("");
+// Replace the detectCurrentLocation function with this corrected version
+const detectCurrentLocation = () => {
+  setIsDetectingLocation(true);
+  setLocationError("");
 
-    if (!navigator.geolocation) {
-      setLocationError("Geolocation is not supported by your browser");
-      setIsDetectingLocation(false);
-      return;
-    }
+  if (!navigator.geolocation) {
+    setLocationError("Geolocation is not supported by your browser");
+    setIsDetectingLocation(false);
+    return;
+  }
 
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        try {
-          const { latitude, longitude } = position.coords;
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      try {
+        const { latitude, longitude } = position.coords;
+        
+        // Reverse geocoding to get address from coordinates
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`
+        );
+        const data = await response.json();
+        
+        if (data.address) {
+          const address = data.address;
+          console.log("Full address data:", data); // For debugging
           
-          // Reverse geocoding to get address from coordinates
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-          );
-          const data = await response.json();
+          // Build location string with better logic
+          let locationString = "";
           
-          if (data.address) {
-            const address = data.address;
-            let locationString = "";
-            
-            if (address.city) {
-              locationString = address.city;
-            } else if (address.town) {
-              locationString = address.town;
-            } else if (address.village) {
+          // Priority order for location name
+          if (address.road) {
+            locationString = address.road;
+          } else if (address.neighbourhood) {
+            locationString = address.neighbourhood;
+          } else if (address.suburb) {
+            locationString = address.suburb;
+          }
+          
+          // Add area/village/town/city
+          if (address.village) {
+            if (locationString) {
+              locationString += `, ${address.village}`;
+            } else {
               locationString = address.village;
             }
-            
-            if (address.state) {
-              locationString += `, ${address.state}`;
-            }
-            
+          } else if (address.town) {
             if (locationString) {
-              setLocation(locationString);
-              localStorage.setItem("userLocation", locationString);
-              localStorage.setItem("userCoordinates", JSON.stringify({ latitude, longitude }));
+              locationString += `, ${address.town}`;
             } else {
-              setLocationError("Could not determine your location. Please enter manually.");
+              locationString = address.town;
             }
-          } else {
-            setLocationError("Location not found. Please enter manually.");
+          } else if (address.city) {
+            if (locationString) {
+              locationString += `, ${address.city}`;
+            } else {
+              locationString = address.city;
+            }
           }
-        } catch (error) {
-          console.error("Error reverse geocoding:", error);
-          setLocationError("Error getting location details. Please enter manually.");
-        } finally {
-          setIsDetectingLocation(false);
-          setShowLocationModal(false);
+          
+          // If we still don't have a good location, try display_name
+          if (!locationString && data.display_name) {
+            // Extract the first part of display_name
+            const displayParts = data.display_name.split(',');
+            locationString = displayParts.slice(0, 2).join(',').trim();
+          }
+          
+          // Add district/county and state
+          if (address.county || address.state_district) {
+            const district = address.county || address.state_district;
+            if (!locationString.includes(district)) {
+              locationString += `, ${district}`;
+            }
+          }
+          
+          if (address.state && !locationString.includes(address.state)) {
+            locationString += `, ${address.state}`;
+          }
+          
+          // Fallback if locationString is still empty
+          if (!locationString && data.display_name) {
+            locationString = data.display_name.split(',')[0].trim();
+          }
+          
+          if (locationString) {
+            // Clean up the location string
+            locationString = locationString.replace(/,,+/g, ',');
+            locationString = locationString.trim();
+            
+            setLocation(locationString);
+            localStorage.setItem("userLocation", locationString);
+            localStorage.setItem("userCoordinates", JSON.stringify({ latitude, longitude }));
+          } else {
+            // Try Google Maps Geocoding API as fallback
+            await tryGoogleGeocoding(latitude, longitude);
+          }
+        } else {
+          setLocationError("Location not found. Please enter manually.");
         }
-      },
-      (error) => {
-        console.error("Geolocation error:", error);
+      } catch (error) {
+        console.error("Error reverse geocoding:", error);
+        // Try alternative geocoding service
+        await tryAlternativeGeocoding(position.coords.latitude, position.coords.longitude);
+      } finally {
         setIsDetectingLocation(false);
-        
-        switch (error.code) {
-          case error.PERMISSION_DENIED:
-            setLocationError("Location access denied. Please enable location services or enter manually.");
-            break;
-          case error.POSITION_UNAVAILABLE:
-            setLocationError("Location information unavailable. Please enter manually.");
-            break;
-          case error.TIMEOUT:
-            setLocationError("Location request timed out. Please try again or enter manually.");
-            break;
-          default:
-            setLocationError("Error detecting location. Please enter manually.");
-        }
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0
+        setShowLocationModal(false);
       }
+    },
+    (error) => {
+      console.error("Geolocation error:", error);
+      setIsDetectingLocation(false);
+      
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          setLocationError("Location access denied. Please enable location services or enter manually.");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          setLocationError("Location information unavailable. Please enter manually.");
+          break;
+        case error.TIMEOUT:
+          setLocationError("Location request timed out. Please try again or enter manually.");
+          break;
+        default:
+          setLocationError("Error detecting location. Please enter manually.");
+      }
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 0
+    }
+  );
+};
+
+// Add these helper functions after the detectCurrentLocation function
+
+// Try Google Maps Geocoding API (requires API key - you'll need to get one)
+const tryGoogleGeocoding = async (latitude, longitude) => {
+  try {
+    // Note: You need to get a Google Maps API key for this to work
+    // Replace 'YOUR_GOOGLE_MAPS_API_KEY' with your actual API key
+    const apiKey = 'YOUR_GOOGLE_MAPS_API_KEY';
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`
     );
-  };
+    const data = await response.json();
+    
+    if (data.results && data.results.length > 0) {
+      const address = data.results[0].formatted_address;
+      setLocation(address);
+      localStorage.setItem("userLocation", address);
+    }
+  } catch (error) {
+    console.error("Google Geocoding error:", error);
+    setLocationError("Could not determine precise location. Please enter manually.");
+  }
+};
+
+// Try alternative geocoding service (BigDataCloud)
+const tryAlternativeGeocoding = async (latitude, longitude) => {
+  try {
+    const response = await fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+    );
+    const data = await response.json();
+    
+    if (data.locality && data.city) {
+      const locationString = `${data.locality}, ${data.city}`;
+      setLocation(locationString);
+      localStorage.setItem("userLocation", locationString);
+    } else if (data.city) {
+      setLocation(data.city);
+      localStorage.setItem("userLocation", data.city);
+    } else {
+      setLocationError("Could not determine location. Please enter manually.");
+    }
+  } catch (error) {
+    console.error("Alternative geocoding error:", error);
+    setLocationError("Location services unavailable. Please enter manually.");
+  }
+};
+
+// Also update the getApproximateLocation function for better IP-based detection
+// Function to get approximate location based on IP
+const getApproximateLocation = async () => {
+  try {
+    // Try multiple IP location services for better accuracy
+    const services = [
+      "https://ipapi.co/json/",
+      "https://ipinfo.io/json?token=YOUR_IPINFO_TOKEN", // You can get a free token from ipinfo.io
+      "https://geolocation-db.com/json/"
+    ];
+    
+    for (const service of services) {
+      try {
+        const response = await fetch(service);
+        const data = await response.json();
+        
+        let locationString = "";
+        
+        if (data.city && data.region) {
+          locationString = `${data.city}, ${data.region}`;
+        } else if (data.city) {
+          locationString = data.city;
+        } else if (data.region) {
+          locationString = data.region;
+        }
+        
+        if (locationString) {
+          setLocation(locationString);
+          localStorage.setItem("userLocation", locationString);
+          return;
+        }
+      } catch (error) {
+        console.log(`Service ${service} failed:`, error);
+      }
+    }
+    
+    // Fallback if all services fail
+    setLocation("Jalandhar, Punjab");
+  } catch (error) {
+    console.log("Could not get approximate location:", error);
+    setLocation("Enter your location");
+  }
+};
+
+  
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -294,7 +426,7 @@ const LandingPage = () => {
               Hungry?
             </h1>
             <p className="text-[22px] md:text-2xl lg:text-3xl font-semibold text-white mb-8 max-w-4xl mx-auto leading-tight">
-              Order food & groceries from your favorite local spots with SajiloBhoj!
+              Order food & groceries from your favorite local spots with BiteXpress!
             </p>
 
             {/* Search Section */}
@@ -487,7 +619,7 @@ const LandingPage = () => {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-2xl md:text-4xl font-bold text-center mb-12">
-            Why Choose SajiloBhoj?
+            Why Choose BiteXpress?
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

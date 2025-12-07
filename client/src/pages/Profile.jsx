@@ -194,7 +194,7 @@ export default function Profile() {
                 </h1>
                 <p className="text-orange-100 md:text-lg text-[15px] flex items-center md:gap-2 gap-1">
                   <IoFastFood />
-                  SajiloBhoj Member since {userStats.memberSince}
+                  BiteXpress Member since {userStats.memberSince}
                 </p>
                 <div className="flex items-center md:gap-4 gap-2 mt-3 text-orange-200">
                   <span className="flex md:text-lg text-[15px] items-center gap-1">

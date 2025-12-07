@@ -100,7 +100,7 @@ export default function NavBar() {
             </div>
             <div>
               <span className="text-[22px] font-bold text-gray-900">
-                Sajilo<span className="text-orange-500">Bhoj</span>
+                Bite<span className="text-orange-500">Xpress</span>
               </span>
               <span className="text-xs text-gray-500 font-[500] block -mt-1">
                 Quick & Delicious

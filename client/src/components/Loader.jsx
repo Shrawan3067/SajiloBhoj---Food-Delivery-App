@@ -38,7 +38,7 @@ const Loader = () => {
             ))}
           </div>
         </div>
-        <h2 className="loader-title">Sajilo Bhoj</h2>
+        <h2 className="loader-title">BiteXpress</h2>
         <p className="loader-subtitle">Loading delicious experiences...</p>
         <div className="loading-bar">
           <div className="loading-progress"></div>

@@ -8,7 +8,7 @@ export default function PartnerPage() {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-orange-500 to-red-500 text-white py-20">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-6">Start your journey with SajiloBhoj</h1>
+          <h1 className="text-5xl font-bold mb-6">Start your journey with BiteXpress</h1>
           <p className="text-xl mb-8 max-w-3xl mx-auto">
             Join Nepal's largest food delivery network and grow your business
           </p>
@@ -46,7 +46,7 @@ export default function PartnerPage() {
       {/* Benefits Section */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">Why Partner with SajiloBhoj?</h2>
+          <h2 className="text-4xl font-bold text-center mb-12">Why Partner with BiteXpress?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-lg shadow-lg text-center hover:shadow-xl transition duration-300">
               <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -115,7 +115,7 @@ export default function PartnerPage() {
                 <h3 className="text-2xl font-bold">Restaurant Partners</h3>
               </div>
               <p className="text-gray-600 mb-4">
-                List your restaurant on SajiloBhoj and reach millions of food lovers. 
+                List your restaurant on BiteXpress and reach millions of food lovers. 
                 We handle delivery while you focus on creating amazing food.
               </p>
               <ul className="space-y-2 mb-6">
@@ -143,7 +143,7 @@ export default function PartnerPage() {
                 <h3 className="text-2xl font-bold">Delivery Partners</h3>
               </div>
               <p className="text-gray-600 mb-4">
-                Become a SajiloBhoj delivery partner and earn flexible income. 
+                Become a BiteXpress delivery partner and earn flexible income. 
                 Choose your own hours and be your own boss.
               </p>
               <ul className="space-y-2 mb-6">
@@ -176,7 +176,7 @@ export default function PartnerPage() {
             <div className="bg-gray-50 p-6 rounded-lg">
               <div className="text-orange-500 text-2xl mb-4">"</div>
               <p className="text-gray-600 mb-4">
-                Partnering with SajiloBhoj helped us increase our sales by 300%. The platform is easy to use and the support team is always helpful.
+                Partnering with BiteXpress helped us increase our sales by 300%. The platform is easy to use and the support team is always helpful.
               </p>
               <div className="font-semibold">- Rajesh Kumar, Restaurant Owner</div>
             </div>
@@ -190,7 +190,7 @@ export default function PartnerPage() {
             <div className="bg-gray-50 p-6 rounded-lg">
               <div className="text-orange-500 text-2xl mb-4">"</div>
               <p className="text-gray-600 mb-4">
-                SajiloBhoj's analytics helped us understand customer preferences better. Our business has grown tremendously.
+                BiteXpress's analytics helped us understand customer preferences better. Our business has grown tremendously.
               </p>
               <div className="font-semibold">- Amit Patel, Cafe Owner</div>
             </div>
@@ -203,7 +203,7 @@ export default function PartnerPage() {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-4">Ready to Get Started?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Join thousands of successful partners who are growing their business with SajiloBhoj
+            Join thousands of successful partners who are growing their business with BiteXpress
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <button className="bg-white text-orange-500 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300">

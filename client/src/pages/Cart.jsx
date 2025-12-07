@@ -275,7 +275,7 @@ export default function Cart() {
           <div className="mt-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-6 text-white text-center">
             <h3 className="font-bold text-lg mb-2">🎉 Special Offer!</h3>
             <p className="text-sm opacity-90">
-              Order now and get 20% off on your next purchase. Use code: <strong>SAJILO20</strong>
+              Order now and get 20% off on your next purchase. Use code: <strong>EXPRESS20</strong>
             </p>
           </div>
         )}

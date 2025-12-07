@@ -277,20 +277,6 @@ export default function LoginPage() {
           )}
         </div>
       </div>
-
-      {/* Footer */}
-      {/* <div className="bg-gray-50 border-t">
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <div className="text-center text-sm text-gray-600">
-            <p>© 2024 SajiloBhoj | All rights reserved.</p>
-            <div className="flex justify-center space-x-4 mt-2">
-              <Link to="/privacy" className="hover:text-orange-500">Privacy Policy</Link>
-              <Link to="/terms" className="hover:text-orange-500">Terms of Service</Link>
-              <Link to="/contact" className="hover:text-orange-500">Contact Us</Link>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 }

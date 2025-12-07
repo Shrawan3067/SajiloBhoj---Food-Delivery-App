@@ -600,7 +600,7 @@ export default function OrderHistory() {
               <p className="text-gray-600 text-lg mb-8 max-w-md mx-auto">
                 {searchTerm 
                   ? 'Try adjusting your search terms or browse different categories'
-                  : 'Start your delicious food journey with Sajilo Bhoj!'
+                  : 'Start your delicious food journey with BiteXpress!'
                 }
               </p>
               <Link 

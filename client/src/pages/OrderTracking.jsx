@@ -475,7 +475,7 @@ export default function OrderTracking() {
           <div className="text-center bg-gradient-to-r from-green-50 to-emerald-50 rounded-3xl p-8 border border-green-200">
             <FaSmile className="text-5xl text-green-500 mx-auto mb-4" />
             <h3 className="text-2xl font-bold text-green-800 mb-2">Enjoy Your Meal! 🎉</h3>
-            <p className="text-green-600 mb-6">Your food has been delivered successfully. Thank you for choosing Sajilo Bhoj!</p>
+            <p className="text-green-600 mb-6">Your food has been delivered successfully. Thank you for choosing BiteXpress!</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link 
                 to="/order-history"

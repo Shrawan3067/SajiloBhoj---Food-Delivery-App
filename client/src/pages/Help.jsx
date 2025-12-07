@@ -50,8 +50,8 @@ const HelpPage = () => {
       faqs: [
         {
           id: 'acc1',
-          question: 'How do I create a SajiloBhoj account?',
-          answer: 'You can create a SajiloBhoj account using your mobile number or email address. Simply download the app, enter your details, and verify with OTP.'
+          question: 'How do I create a BiteXpress account?',
+          answer: 'You can create a BiteXpress account using your mobile number or email address. Simply download the app, enter your details, and verify with OTP.'
         },
         {
           id: 'acc2',
@@ -515,7 +515,7 @@ const HelpPage = () => {
                     <FiMail className="text-orange-500" />
                     <div>
                       <p className="font-medium">Email Us</p>
-                      <p className="text-gray-600">support@sajilobhoj.com</p>
+                      <p className="text-gray-600">support@bitexpress.com</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
