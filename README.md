@@ -1,6 +1,6 @@
-# SajiloBhoj – Food Delivery App
+# BiteXpress – Food Delivery App
 
-SajiloBhoj is a simple, fast, and user-friendly food delivery application designed to connect users with nearby restaurants and provide a smooth online food-ordering experience. The platform allows users to browse menus, place orders, track delivery status, and enjoy delicious meals delivered right to their doorstep—all through a clean and intuitive interface built for convenience and reliability.
+BiteXpress is a simple, fast, and user-friendly food delivery application designed to connect users with nearby restaurants and provide a smooth online food-ordering experience. The platform allows users to browse menus, place orders, track delivery status, and enjoy delicious meals delivered right to their doorstep—all through a clean and intuitive interface built for convenience and reliability.
 
 ## 🍽️ Features
 
@@ -85,7 +85,7 @@ Payment Gateway API (eSewa, Khalti, FonePay, etc.)
 ## ⚙️ Installation & Setup
 
 ### Backend Setup
-git clone https://github.com/yourusername/SajiloBhoj.git
+git clone https://github.com/Shrawan3067/BiteXpress---Food-Delivery-App.git
 cd backend
 npm install
 npm start
@@ -96,7 +96,7 @@ npm install
 npm start
 
 ### 📂 Project Structure
-SajiloBhoj/
+BiteXpress/
 ├── frontend/
 │   ├── assets/
 │   ├── components/
