@@ -270,7 +270,7 @@ export default function RestaurantList(): JSX.Element {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .scrollbar-hide {
           -ms-overflow-style: none;
           scrollbar-width: none;
