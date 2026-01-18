@@ -1,4 +1,3 @@
-// src/components/NavBar.jsx
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import sajilobhoj_icon from "../assets/sajilobhoj_icon9.png";
@@ -17,22 +16,22 @@ import { BiSolidOffer } from "react-icons/bi";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 
-export default function NavBar() {
-  const { user, logout } = useAuth();
-  const { cart } = useCart();
-  const cartCount = cart?.reduce((sum, item) => sum + (item.qty || 0), 0) || 0;
+export default function NavBar(): JSX.Element {
+  const { user, logout } = useAuth() as any;
+  const { cart } = useCart() as any;
+  const cartCount = cart?.reduce((sum: number, item: any) => sum + (item.qty || 0), 0) || 0;
   const navigate = useNavigate();
 
   const location = useLocation();
-  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
-  const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const searchRef = useRef(null);
-  const userMenuRef = useRef(null);
-  const mobileMenuRef = useRef(null);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState<boolean>(false);
+  const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
+  const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
+  const searchRef = useRef<any>(null);
+  const userMenuRef = useRef<any>(null);
+  const mobileMenuRef = useRef<any>(null);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: any) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         setMobileSearchOpen(false);
       }
@@ -47,17 +46,17 @@ export default function NavBar() {
     // Add both mouse and touch events
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("touchstart", handleClickOutside);
-    
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("touchstart", handleClickOutside);
     };
   }, []);
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path: string) => location.pathname === path;
 
   const handleLogout = () => {
-    logout();
+    logout?.();
     setShowUserMenu(false);
     setShowMobileMenu(false);
     navigate("/");
@@ -256,7 +255,7 @@ export default function NavBar() {
               <FaTimes size={20} className="text-gray-700" />
             </button>
           </div>
-          
+
           {/* Mobile User Section */}
           <div className="border-b border-gray-200 pb-4 mb-4">
             {user ? (

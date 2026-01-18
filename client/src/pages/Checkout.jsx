@@ -1,8 +1,10 @@
 // src/pages/CheckoutPage.jsx
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
-import { FaArrowLeft, FaMapMarkerAlt, FaClock, FaWallet, FaCreditCard, FaMoneyBill, FaUser, FaPhone, FaHome, FaUtensils, FaShieldAlt, FaHeadset, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaArrowLeft, FaMapMarkerAlt, FaClock, FaWallet, FaCreditCard, FaMoneyBill, FaUser, FaPhone, FaHome, FaUtensils, FaShieldAlt, FaHeadset, FaEye, FaEyeSlash, FaQrcode, FaCheckCircle } from "react-icons/fa";
+// CORRECT IMPORT - Use QRCodeSVG or QRCodeCanvas
+import { QRCodeSVG } from "qrcode.react"; // Changed from QRCode
 
 export default function CheckoutPage() {
   const { cart, clearCart, totalPrice } = useContext(CartContext);
@@ -30,10 +32,82 @@ export default function CheckoutPage() {
   // UPI payment details
   const [upiId, setUpiId] = useState("");
   const [showCvv, setShowCvv] = useState(false);
+  
+  // QR Payment state
+  const [showQRCode, setShowQRCode] = useState(false);
+  const [qrData, setQrData] = useState("");
+  const [isQrPaymentVerified, setIsQrPaymentVerified] = useState(false);
+  const [isCheckingPayment, setIsCheckingPayment] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState(""); // pending, success, failed
+  const paymentCheckInterval = useRef(null);
 
   const deliveryFee = 30;
   const tax = Math.round(totalPrice * 0.05);
   const finalTotal = totalPrice + deliveryFee + tax;
+
+  useEffect(() => {
+    // Cleanup interval on unmount
+    return () => {
+      if (paymentCheckInterval.current) {
+        clearInterval(paymentCheckInterval.current);
+      }
+    };
+  }, []);
+
+  const generateQRCode = () => {
+    // Create a unique transaction ID
+    const transactionId = `TXN${Date.now()}${Math.random().toString(36).substr(2, 9)}`;
+    
+    // Create QR data in UPI format
+    const qrDataString = `upi://pay?pa=${encodeURIComponent("restaurant@upi")}&pn=${encodeURIComponent(deliveryDetails.name || "Customer")}&am=${finalTotal}&tn=${encodeURIComponent(`Order from Swiggy Clone - ${transactionId}`)}&cu=INR`;
+    
+    setQrData(qrDataString);
+    setShowQRCode(true);
+    setIsQrPaymentVerified(false);
+    setPaymentStatus("pending");
+    
+    // Start checking for payment status
+    startPaymentVerification(transactionId);
+  };
+
+  const startPaymentVerification = (transactionId) => {
+    // Clear any existing interval
+    if (paymentCheckInterval.current) {
+      clearInterval(paymentCheckInterval.current);
+    }
+    
+    // Simulate payment verification (in real app, this would be an API call)
+    paymentCheckInterval.current = setInterval(() => {
+      checkPaymentStatus(transactionId);
+    }, 3000); // Check every 3 seconds
+  };
+
+  const checkPaymentStatus = async (transactionId) => {
+    setIsCheckingPayment(true);
+    
+    // Simulate API call to check payment status
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // For demo purposes, simulate success 70% of the time after 3 checks
+    const checkCount = Math.floor(Math.random() * 10);
+    
+    if (checkCount > 3) { // Simulate successful payment
+      setIsQrPaymentVerified(true);
+      setPaymentStatus("success");
+      setIsCheckingPayment(false);
+      
+      if (paymentCheckInterval.current) {
+        clearInterval(paymentCheckInterval.current);
+      }
+      
+      // Auto-place order after successful payment
+      setTimeout(() => {
+        handlePlaceOrder();
+      }, 1500);
+    } else {
+      setIsCheckingPayment(false);
+    }
+  };
 
   const handleInputChange = (e) => {
     setDeliveryDetails({
@@ -73,44 +147,51 @@ export default function CheckoutPage() {
     return v;
   };
 
-const handlePlaceOrder = async () => {
-  if (!deliveryDetails.name || !deliveryDetails.phone || !deliveryDetails.address) {
-    alert("Please fill in all required delivery details");
-    return;
-  }
+  const handlePlaceOrder = async () => {
+    if (!deliveryDetails.name || !deliveryDetails.phone || !deliveryDetails.address) {
+      alert("Please fill in all required delivery details");
+      return;
+    }
 
-  if (paymentMethod === "card" && (!cardDetails.cardNumber || !cardDetails.expiryDate || !cardDetails.cvv || !cardDetails.cardHolderName)) {
-    alert("Please fill in all card details");
-    return;
-  }
+    if (paymentMethod === "card" && (!cardDetails.cardNumber || !cardDetails.expiryDate || !cardDetails.cvv || !cardDetails.cardHolderName)) {
+      alert("Please fill in all card details");
+      return;
+    }
 
-  if (paymentMethod === "upi" && !upiId) {
-    alert("Please enter your UPI ID");
-    return;
-  }
+    if (paymentMethod === "upi" && !upiId && !showQRCode) {
+      alert("Please enter your UPI ID or use QR code");
+      return;
+    }
 
-  setIsPlacingOrder(true);
-  
-  // Simulate API call
-  await new Promise(resolve => setTimeout(resolve, 2000));
-  
-  // Create order object with unique ID
-  const newOrder = {
-    id: `SWGY${Date.now()}`,
-    restaurant: "Restaurant Name",
-    total: finalTotal,
-    status: 'preparing',
-    orderDate: new Date().toISOString(),
-    items: cart.map(item => ({
-      name: item.name,
-      quantity: item.qty,
-      price: item.price
-    }))
+    if (paymentMethod === "qr" && !isQrPaymentVerified) {
+      alert("Please complete QR payment first");
+      return;
+    }
+
+    setIsPlacingOrder(true);
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Create order object with unique ID
+    const newOrder = {
+      id: `SWGY${Date.now()}`,
+      restaurant: "Restaurant Name",
+      total: finalTotal,
+      status: 'preparing',
+      paymentMethod: paymentMethod,
+      paymentStatus: paymentMethod === "qr" ? "paid" : "pending",
+      orderDate: new Date().toISOString(),
+      items: cart.map(item => ({
+        name: item.name,
+        quantity: item.qty,
+        price: item.price
+      }))
+    };
+    
+    clearCart();
+    navigate('/order-confirmation', { state: { order: newOrder } });
   };
-  
-  clearCart();
-  navigate('/order-confirmation', { state: { order: newOrder } });
-};
 
   if (cart.length === 0) {
     return (
@@ -410,7 +491,81 @@ const handlePlaceOrder = async () => {
                       </button>
                     </div>
                     
-                    <div className="flex items-center text-xs text-green-600">
+                    {/* QR Code Payment Option */}
+                    <div className="mt-6 border-t pt-4">
+                      <div className="flex items-center mb-3">
+                        <FaQrcode className="text-orange-500 mr-2" />
+                        <h3 className="font-medium">OR Pay via QR Code</h3>
+                      </div>
+                      
+                      <button
+                        type="button"
+                        onClick={generateQRCode}
+                        className="w-full p-3 border-2 border-dashed border-orange-300 rounded-lg hover:bg-orange-50 transition-colors"
+                      >
+                        <div className="flex flex-col items-center">
+                          <FaQrcode className="text-2xl text-orange-500 mb-2" />
+                          <span className="font-medium text-orange-600">Generate QR Code</span>
+                          <p className="text-xs text-gray-500 mt-1">Scan and pay using any UPI app</p>
+                        </div>
+                      </button>
+                      
+                      {/* QR Code Display */}
+                      {showQRCode && (
+                        <div className="mt-4 p-4 bg-white border border-gray-200 rounded-lg">
+                          <div className="flex flex-col items-center">
+                            <div className="mb-4 p-2 bg-white border border-gray-300">
+                              {/* Use QRCodeSVG instead of QRCode */}
+          <QRCodeSVG 
+            value={qrData} 
+            size={180}
+            level="H"
+            includeMargin={true}
+          />
+                            </div>
+                            
+                            {/* Payment Status */}
+                            {isCheckingPayment && (
+                              <div className="flex items-center text-blue-600 mb-3">
+                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600 mr-2"></div>
+                                <span>Checking payment status...</span>
+                              </div>
+                            )}
+                            
+                            {isQrPaymentVerified && (
+                              <div className="flex items-center text-green-600 mb-3">
+                                <FaCheckCircle className="mr-2 text-xl" />
+                                <span className="font-medium">Payment Verified Successfully!</span>
+                              </div>
+                            )}
+                            
+                            <div className="text-center mb-3">
+                              <p className="text-sm font-medium">Amount: ₹{finalTotal}</p>
+                              <p className="text-xs text-gray-500">Scan this QR with any UPI app</p>
+                            </div>
+                            
+                            <div className="flex space-x-2">
+                              <button
+                                type="button"
+                                onClick={() => setShowQRCode(false)}
+                                className="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50"
+                              >
+                                Close QR
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => generateQRCode()}
+                                className="px-4 py-2 bg-orange-100 text-orange-600 rounded-lg text-sm hover:bg-orange-200"
+                              >
+                                Regenerate QR
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="flex items-center text-xs text-green-600 mt-4">
                       <FaShieldAlt className="mr-2" />
                       <span>UPI payments are secure and instant</span>
                     </div>
@@ -482,16 +637,36 @@ const handlePlaceOrder = async () => {
               </div>
             </div>
             
+            {/* Payment Status for QR */}
+            {paymentMethod === "upi" && isQrPaymentVerified && (
+              <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                <div className="flex items-center text-green-700">
+                  <FaCheckCircle className="mr-2" />
+                  <span className="font-medium">QR Payment Verified!</span>
+                </div>
+                <p className="text-xs text-green-600 mt-1">You can now place your order</p>
+              </div>
+            )}
+            
             {/* Place Order Button */}
             <button
               onClick={handlePlaceOrder}
-              disabled={isPlacingOrder}
-              className="w-full mt-6 bg-orange-500 text-white py-4 rounded-lg font-bold hover:bg-orange-600 disabled:bg-orange-300 transition duration-300"
+              disabled={isPlacingOrder || (paymentMethod === "upi" && showQRCode && !isQrPaymentVerified)}
+              className={`w-full mt-6 py-4 rounded-lg font-bold transition duration-300 ${
+                isPlacingOrder || (paymentMethod === "upi" && showQRCode && !isQrPaymentVerified)
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-orange-500 text-white hover:bg-orange-600"
+              }`}
             >
               {isPlacingOrder ? (
                 <div className="flex items-center justify-center">
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
                   Placing Order...
+                </div>
+              ) : paymentMethod === "upi" && showQRCode && !isQrPaymentVerified ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-orange-500 mr-2"></div>
+                  Verify Payment First
                 </div>
               ) : (
                 `Place Order • ₹${finalTotal}`

@@ -1,13 +1,19 @@
-// Loader.jsx
 import React, { useState, useEffect } from 'react';
 import './Loader.css';
 import Biryani from '../assets/Biryani.png';
 import Pizza from '../assets/Pizza.png';
 import Burger from '../assets/Burger.png';
 
-const Loader = () => {
-  const [activeItem, setActiveItem] = useState(0);
-  const foodItems = [
+type FoodItem = {
+  id: number;
+  src: string;
+  alt: string;
+  className: string;
+};
+
+const Loader = (): JSX.Element => {
+  const [activeItem, setActiveItem] = useState<number>(0);
+  const foodItems: FoodItem[] = [
     { id: 0, src: Burger, alt: 'Burger', className: 'burger' },
     { id: 1, src: Pizza, alt: 'Pizza', className: 'pizza' },
     { id: 2, src: Biryani, alt: 'Biryani', className: 'biryani' }

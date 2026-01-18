@@ -1,23 +1,3 @@
-import React, { useState } from "react";
-import { restaurants } from "../data/restaurants";
-import RestaurantCard from "./RestaurantCard";
-import { IoRestaurantOutline } from "react-icons/io5";
-import { 
-  FaFilter, 
-  FaStar, 
-  FaTag, 
-  FaLeaf, 
-  FaMoneyBillWave,
-  FaTimes,
-  FaFire,
-  FaSearch,
-  FaShippingFast
-} from "react-icons/fa";
-
-export default function RestaurantList() {
-  const [search, setSearch] = useState("");
-  const [activeFilters, setActiveFilters] = useState([]); // Changed to array
-  const [sortBy, setSortBy] = useState("relevance");
 
   const filters = [
     { key: "offers", label: "Offers", icon: <FaTag className="text-red-500" />, count: restaurants.filter(r => r.hasOffer).length },
@@ -339,5 +319,4 @@ export default function RestaurantList() {
         }
       `}</style>
     </div>
-  );
-}
+export { default } from './RestaurantList';
