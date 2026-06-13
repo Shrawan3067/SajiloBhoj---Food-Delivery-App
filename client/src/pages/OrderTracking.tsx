@@ -516,7 +516,7 @@ const OrderTracking: React.FC = () => {
             </h3>
             <p className="text-green-600 mb-6">
               Your food has been delivered successfully. Thank you for choosing
-              BiteXpress!
+              BiteMitra!
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link

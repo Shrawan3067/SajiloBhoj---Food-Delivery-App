@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import sajilobhoj_icon from "../assets/sajilobhoj_icon9.png";
+import bitemitra_icon from "../assets/bitemitra-logo.png";
 import {
   FaUserAlt,
   FaShoppingCart,
@@ -85,27 +85,19 @@ export default function NavBar(): JSX.Element {
   return (
     <>
       {/* Desktop Nav - fixed at top */}
-      <nav className="sticky top-0 w-full bg-white shadow-sm z-50">
-        <div className="max-w-7xl mx-auto px-6 py-1 flex justify-between items-center w-full">
+      <nav className="fixed top-0 w-full bg-white shadow-sm z-50">
+        <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center w-full">
           {/* Logo */}
           <Link to="/" className="flex items-center group">
             <div className="relative">
-              <div className="absolute rounded-full"></div>
               <img
-                src={sajilobhoj_icon}
-                alt="SajiloBhoj Logo"
-                className="h-18 object-contain cursor-pointer relative z-10"
+                src={bitemitra_icon}
+                alt="BiteMitra Logo"
+                className="h-14 object-contain cursor-pointer relative z-10"
               />
             </div>
-            <div>
-              <span className="text-[22px] font-bold text-gray-900">
-                Bite<span className="text-orange-500">Xpress</span>
-              </span>
-              <span className="text-xs text-gray-500 font-[500] block -mt-1">
-                Quick & Delicious
-              </span>
-            </div>
           </Link>
+          
 
           {/* Mobile Menu Button - Hidden on desktop */}
           <button
@@ -356,14 +348,14 @@ export default function NavBar(): JSX.Element {
             isActive("/") ? "text-orange-600" : "text-gray-700"
           } hover:text-orange-600 transition-colors duration-200`}
         >
-          <FaHome size={20} />
+          <FaHome className="w-7 h-7" />
           <span className="text-xs mt-1">Home</span>
         </Link>
         <button
           onClick={() => setMobileSearchOpen(true)}
           className="flex flex-col items-center p-2 text-gray-700 hover:text-orange-600 transition-colors duration-200"
         >
-          <FiSearch size={20} />
+          <FiSearch className="w-7 h-7" />
           <span className="text-xs mt-1">Search</span>
         </button>
         <Link
@@ -372,7 +364,7 @@ export default function NavBar(): JSX.Element {
             isActive("/offers") ? "text-orange-600" : "text-gray-700"
           } hover:text-orange-600 transition-colors duration-200`}
         >
-          <BiSolidOffer size={20} />
+          <BiSolidOffer className="w-7 h-7" />
           <span className="text-xs mt-1">Offers</span>
         </Link>
         
@@ -383,7 +375,7 @@ export default function NavBar(): JSX.Element {
             isActive("/profile") ? "text-orange-600" : "text-gray-700"
           } hover:text-orange-600 transition-colors duration-200`}
         >
-          <FaUserAlt size={20} />
+          <FaUserAlt className="w-7 h-7" />
           <span className="text-xs mt-1">{user ? "Account" : "Login"}</span>
         </button>
 
@@ -395,7 +387,7 @@ export default function NavBar(): JSX.Element {
           } hover:text-orange-600 transition-colors duration-200`}
         >
           <div className="relative">
-            <FaShoppingCart size={20} />
+            <FaShoppingCart className="w-7 h-7" />
             {cartCount > 0 && (
               <span className="absolute -top-1 -right-1 bg-orange-600 text-white text-xs px-1 rounded-full min-w-[16px] text-center">
                 {cartCount}

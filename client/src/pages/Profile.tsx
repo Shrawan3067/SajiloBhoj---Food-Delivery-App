@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import AddressForm from "../components/AddressForm";
-import "./Profile.css";
+import { getAddresses, addAddress, updateAddress, deleteAddress, setDefaultAddress, getProfile } from "../services/userService";
 import { Link } from "react-router-dom";
 import {
   FaUser,
@@ -46,40 +46,30 @@ export default function Profile(): JSX.Element {
   const [activeTab, setActiveTab] = useState<string>("profile");
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
+  const [addresses, setAddresses] = useState<Address[]>([]);
 
-  const [addresses, setAddresses] = useState<Address[]>([
-    {
-      id: 1,
-      type: "home",
-      name: "Home",
-      address: "123 Main Street, Apartment 4B",
-      landmark: "Near Central Park",
-      city: "Mumbai",
-      state: "Maharashtra",
-      pincode: "400001",
-      phone: "9876543210",
-      isDefault: true,
-    },
-    {
-      id: 2,
-      type: "work",
-      name: "Work",
-      address: "Tech Park Building, Floor 8",
-      landmark: "Opposite Metro Station",
-      city: "Mumbai",
-      state: "Maharashtra",
-      pincode: "400002",
-      phone: "9876543210",
-      isDefault: false,
-    },
-  ]);
+  // Fetch addresses and user data from API
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const [addressesData, profileData] = await Promise.all([
+          getAddresses(),
+          getProfile(),
+        ]);
+        setAddresses(addressesData);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchUserData();
+  }, []);
 
   const userStats = {
-    totalOrders: 24,
-    memberSince: "2023",
-    favoriteCuisine: "Italian",
-    loyaltyPoints: 1250,
-    savedAmount: 840,
+    totalOrders: user?.totalOrders || 0,
+    memberSince: user?.createdAt ? new Date(user.createdAt).getFullYear().toString() : "2024",
+    favoriteCuisine: user?.favoriteCuisine || "Not specified",
+    loyaltyPoints: user?.loyaltyPoints || 0,
+    savedAmount: user?.savedAmount || 0,
   };
 
   const menuItems = [
@@ -133,20 +123,22 @@ export default function Profile(): JSX.Element {
     },
   ];
 
-  const handleAddAddress = (newAddress: Address) => {
-    if (editingAddress) {
-      setAddresses(
-        addresses.map((addr) =>
-          addr.id === editingAddress.id
-            ? { ...newAddress, id: editingAddress.id }
-            : addr,
-        ),
-      );
-    } else {
-      setAddresses([...addresses, { ...newAddress, id: Date.now() }]);
+  const handleAddAddress = async (newAddress: Address) => {
+    try {
+      if (editingAddress) {
+        await updateAddress(String(editingAddress.id), newAddress);
+      } else {
+        await addAddress(newAddress);
+      }
+      // Refresh addresses
+      const data = await getAddresses();
+      setAddresses(data);
+      setShowAddressForm(false);
+      setEditingAddress(null);
+    } catch (error) {
+      console.error('Error saving address:', error);
+      alert('Failed to save address');
     }
-    setShowAddressForm(false);
-    setEditingAddress(null);
   };
 
   const handleEditAddress = (address: Address) => {
@@ -154,16 +146,28 @@ export default function Profile(): JSX.Element {
     setShowAddressForm(true);
   };
 
-  const handleDeleteAddress = (addressId: number | string) => {
+  const handleDeleteAddress = async (addressId: number | string) => {
     if (window.confirm("Are you sure you want to delete this address?")) {
-      setAddresses(addresses.filter((addr) => addr.id !== addressId));
+      try {
+        await deleteAddress(String(addressId));
+        const data = await getAddresses();
+        setAddresses(data);
+      } catch (error) {
+        console.error('Error deleting address:', error);
+        alert('Failed to delete address');
+      }
     }
   };
 
-  const setDefaultAddress = (addressId: number | string) => {
-    setAddresses(
-      addresses.map((addr) => ({ ...addr, isDefault: addr.id === addressId })),
-    );
+  const setDefaultAddressHandler = async (addressId: number | string) => {
+    try {
+      await setDefaultAddress(addressId as string);
+      const data = await getAddresses();
+      setAddresses(data);
+    } catch (error) {
+      console.error('Error setting default address:', error);
+      alert('Failed to set default address');
+    }
   };
 
   if (showAddressForm) {
@@ -200,7 +204,7 @@ export default function Profile(): JSX.Element {
                 </h1>
                 <p className="text-orange-100 md:text-lg text-[15px] flex items-center md:gap-2 gap-1">
                   <IoFastFood />
-                  BiteXpress Member since {userStats.memberSince}
+                  BiteMitra Member since {userStats.memberSince}
                 </p>
                 <div className="flex items-center md:gap-4 gap-2 mt-3 text-orange-200">
                   <span className="flex md:text-lg text-[15px] items-center gap-1">
@@ -511,7 +515,7 @@ export default function Profile(): JSX.Element {
                           </span>
                           {!address.isDefault && (
                             <button
-                              onClick={() => setDefaultAddress(address.id)}
+                              onClick={() => setDefaultAddressHandler(address.id)}
                               className="text-orange-500 text-sm font-semibold hover:underline flex items-center gap-1"
                             >
                               Set as Default

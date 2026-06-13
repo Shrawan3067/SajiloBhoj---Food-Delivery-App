@@ -103,6 +103,8 @@ export default function LoginPage(): JSX.Element {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
+                        <div className="h-20" />
+
       <div className="flex-1 flex items-center justify-center px-4 py-8">
         <div className="max-w-md w-full">
           <div className="flex bg-gray-100 rounded-lg p-1 mb-8">

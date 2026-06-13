@@ -1,66 +1,71 @@
 # BiteXpress – Food Delivery App (React + Node.js)
 
-BiteXpress is a responsive food delivery application built with **React.js**, designed to deliver a clean and intuitive user experience. The platform allows users to browse restaurants, view menus, place orders, and track delivery status in real-time. The project focuses on building scalable UI components, integrating APIs, and maintaining performance—aligned with SaaS dashboard-style applications.
-
----
-
-## 🚀 Key Highlights (Aligned to React Developer Intern Role)
-
-- Built using **React.js (Functional Components & Hooks)**  
-- Developed **responsive UI** using modern CSS (Tailwind can be integrated)  
-- Integrated frontend with **backend APIs** for real-time order updates  
-- Created reusable components and optimized application performance  
-- Implemented **user authentication** and secure order flow  
-- Designed dashboard-like interfaces for restaurant and delivery partners  
-- Built scalable project structure following clean code principles  
-
----
+BiteXpress is a simple, fast, and user-friendly food delivery application designed to connect users with nearby restaurants and provide a smooth online food-ordering experience. The platform allows users to browse menus, place orders, track delivery status, and enjoy delicious meals delivered right to their doorstep—all through a clean and intuitive interface built for convenience and reliability.
 
 ## 🍽️ Features
 
 ### 🏠 User Features
-- Browse restaurants with search and filters  
-- View menus, add items to cart, and place orders  
-- Secure checkout with order confirmation  
-- Real-time order tracking and status updates  
-- Save favorite restaurants and dishes  
 
-### 🛵 Delivery Partner Features
-- Delivery partner login  
-- Accept and manage delivery tasks  
-- Live order status updates  
+Browse restaurants based on location
 
-### 🏨 Restaurant Admin Features
-- Restaurant dashboard to manage menu items  
-- Add, edit, or remove food items  
-- Manage incoming orders and update order status  
+View menus with item details and prices
+
+Add items to cart and customize orders
+
+Secure checkout and order confirmation
+
+Real-time order tracking
+
+Save favorite restaurants and dishes
+
+### 🛵 Delivery Features
+
+Delivery partner login
+
+Accept and manage delivery tasks
+
+Live order status updates
+
+Navigation support for faster delivery
+
+### 🏨 Restaurant Features
+
+Restaurant dashboard for managing menus
+
+Add, edit, or remove food items
+
+Manage incoming orders
+
+Update order status (Preparing → Out for Delivery → Completed)
 
 ### 🔒 Authentication
-- User, restaurant, and delivery partner login  
-- Secure password handling  
 
----
+User, restaurant, and delivery partner login
+
+Secure password handling
+
+OTP/email verification (optional)
 
 ## 🧱 Tech Stack
 
 ### Frontend
-- React.js (Functional Components, Hooks)  
-- HTML5, CSS3, JavaScript (ES6+)  
-- Tailwind CSS (can be added)  
+React
+HTML, CSS, JavaScript
 
 ### Backend
-- Node.js + Express.js  
+Node.js + Express
 
 ### Database
-- MongoDB  
+
+MongoDB / MySQL
 
 ### APIs & Services
-- Google Maps API (Live tracking & navigation)  
-- Payment Gateway API (eSewa, Khalti, FonePay, etc.)  
 
----
+Google Maps API (Live tracking & navigation)
 
-## 🖼️ Screenshots
+Payment Gateway API (eSewa, Khalti, FonePay, etc.)
+
+## 📸 Screenshots
 
 ### 🏠 Home Screen  
 <img width="1905" height="960" alt="sajilobhoj_home" src="https://github.com/user-attachments/assets/e48519e9-52d5-45fa-8028-fbc3516b6337" />
@@ -74,62 +79,58 @@ BiteXpress is a responsive food delivery application built with **React.js**, de
 ### 🛒 Cart & Checkout  
 <img width="1909" height="961" alt="checkout" src="https://github.com/user-attachments/assets/79ceff97-c448-45a4-be94-8bf5d6c4994c" />
 
----
 
 ## ⚙️ Installation & Setup
 
+### Prerequisites
+- Node.js (v18 or higher)
+- MongoDB (local installation or MongoDB Atlas)
+- npm or yarn
+
 ### Backend Setup
-```bash
 git clone https://github.com/Shrawan3067/BiteXpress---Food-Delivery-App.git
 cd backend
 npm install
 npm start
-```
 
-## 📂 Project Structure
-```bash
-`BiteExpress---Food-Delivery-App/`
-├─ `client/`
-│  ├─ `src/`
-│  │  ├─ `components/`
-│  │  ├─ `pages/`
-│  │  ├─ `context/`
-│  │  ├─ `services/`
-│  │  └─ `assets/`
-│  ├─ `public/`
-│  ├─ `package.json`
-│  └─ `vite.config.ts`
-└─ `server/`
-   ├─ `routes/`
-   ├─ `controllers/`
-   ├─ `models/`
-   ├─ `config/`
-   └─ `package.json`
- 
-```
+### Frontend Setup
+cd frontend
+npm install
+npm start
 
-## 🛠️ Key Functionalities (Job-Aligned)
-✔ React UI & Performance
+### 📂 Project Structure
+BiteXpress/
+├── frontend/
+│   ├── assets/
+│   ├── components/
+│   ├── screens/
+│   └── services/
+├── backend/
+│   ├── routes/
+│   ├── controllers/
+│   ├── models/
+│   └── config/
+└── README.md
 
-Fast, lightweight UI for quick loading
+## 🛠️ Key Functionalities
 
-Clean component-based structure
+### 🚀 Optimized Performance
 
-Optimized state management for cart & order flow
+Lightweight UI for fast loading
 
-✔ Real-time Updates & API Integration
+Efficient API handling
 
-Integrated backend APIs for order tracking
+Smooth navigation & seamless order flow
 
-Real-time status updates and notifications
+### 🔔 Notifications
 
-✔ Clean Code & Debugging
+Order updates
 
-Well-structured codebase
+Restaurant promotions
 
-Debugged across browsers and improved UX
+Delivery alerts
 
-## 🤝 Contribution
+### 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome.
 Feel free to submit a pull request or open an issue to improve the platform.
@@ -138,3 +139,5 @@ Feel free to submit a pull request or open an issue to improve the platform.
 
 For support or collaboration inquiries:
 Email: shrawansah3067@gmail.com
+
+# Developer : Shrawan Kumar Sah

@@ -44,7 +44,7 @@ const Loader = (): JSX.Element => {
             ))}
           </div>
         </div>
-        <h2 className="loader-title">BiteXpress</h2>
+        <h2 className="loader-title">BiteMitra</h2>
         <p className="loader-subtitle">Loading delicious experiences...</p>
         <div className="loading-bar">
           <div className="loading-progress"></div>

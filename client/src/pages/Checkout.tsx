@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { createOrder } from "../services/orderService";
 import {
   FaArrowLeft,
   FaMapMarkerAlt,
@@ -192,27 +193,35 @@ export default function CheckoutPage(): JSX.Element {
 
     setIsPlacingOrder(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      // Get restaurant ID from cart items (assuming all items have same restaurantId)
+      const restaurantId = cart[0]?.restaurantId;
+      
+      const orderData = {
+        restaurantId,
+        items: cart.map((item: any) => ({
+          name: item.name,
+          quantity: item.qty,
+          price: item.price,
+          veg: item.veg || true,
+        })),
+        deliveryAddress: deliveryDetails.address,
+        deliveryInstructions: deliveryDetails.instructions,
+        paymentMethod,
+        total: totalPrice,
+        deliveryFee,
+        tax,
+      };
 
-    // Create order object with unique ID
-    const newOrder = {
-      id: `SWGY${Date.now()}`,
-      restaurant: "Restaurant Name",
-      total: finalTotal,
-      status: "preparing",
-      paymentMethod: paymentMethod,
-      paymentStatus: paymentMethod === "qr" ? "paid" : "pending",
-      orderDate: new Date().toISOString(),
-      items: cart.map((item: any) => ({
-        name: item.name,
-        quantity: item.qty,
-        price: item.price,
-      })),
-    };
-
-    clearCart();
-    navigate("/order-confirmation", { state: { order: newOrder } });
+      const response = await createOrder(orderData);
+      clearCart();
+      navigate("/order-confirmation", { state: { order: response.order } });
+    } catch (error: any) {
+      console.error('Error placing order:', error);
+      alert(error.response?.data?.message || 'Failed to place order. Please try again.');
+    } finally {
+      setIsPlacingOrder(false);
+    }
   };
 
   if (cart.length === 0) {

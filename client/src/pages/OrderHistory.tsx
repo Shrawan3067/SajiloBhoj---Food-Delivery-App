@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { getUserOrders } from "../services/orderService";
 import {
   FaHistory,
   FaSearch,
@@ -281,14 +282,20 @@ export default function OrderHistory(): JSX.Element {
   const [filteredOrders, setFilteredOrders] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sortBy, setSortBy] = useState("newest");
-
-  const [orders, setOrders] = useState<any[]>([
-    /* sample orders omitted for brevity */
-  ]);
+  const [orders, setOrders] = useState<any[]>([]);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1500);
-    return () => clearTimeout(timer);
+    const fetchOrders = async () => {
+      try {
+        const data = await getUserOrders();
+        setOrders(data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+        setIsLoading(false);
+      }
+    };
+    fetchOrders();
   }, []);
 
   useEffect(() => {
@@ -429,7 +436,7 @@ export default function OrderHistory(): JSX.Element {
               <p className="text-gray-600 text-lg mb-8 max-w-md mx-auto">
                 {searchTerm
                   ? "Try adjusting your search terms or browse different categories"
-                  : "Start your delicious food journey with BiteXpress!"}
+                  : "Start your delicious food journey with BiteMitra!"}
               </p>
               <Link
                 to="/restaurant-list"

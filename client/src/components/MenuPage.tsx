@@ -1,7 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import paneerbutter from "../assets/paneer_butter.png";
 import { CartContext } from "../context/CartContext";
+import { getRestaurantMenu, getRestaurantById } from "../services/restaurantService";
 import {
   FaShoppingCart,
   FaStar,
@@ -15,134 +16,7 @@ import {
 import { IoFastFood } from "react-icons/io5";
 import { IoLeaf } from "react-icons/io5";
 
-const menuData: Record<string, any[]> = {
-  1: [
-    {
-      id: 1,
-      name: "Paneer Butter Masala",
-      price: 180,
-      veg: true,
-      bestseller: true,
-      offer: true,
-      rating: 4.5,
-      description: "Creamy paneer in rich tomato butter sauce",
-      preparationTime: "25 min",
-      calories: "320 cal",
-    },
-    {
-      id: 2,
-      name: "Chicken Curry",
-      price: 220,
-      veg: false,
-      bestseller: false,
-      offer: false,
-      rating: 4.2,
-      description: "Spicy chicken cooked in traditional spices",
-      preparationTime: "30 min",
-      calories: "280 cal",
-    },
-    {
-      id: 3,
-      name: "Veg Fried Rice",
-      price: 150,
-      veg: true,
-      bestseller: false,
-      offer: false,
-      rating: 4.0,
-      description: "Fresh vegetables stir-fried with basmati rice",
-      preparationTime: "20 min",
-      calories: "250 cal",
-    },
-    {
-      id: 4,
-      name: "Mutton Biryani",
-      price: 280,
-      veg: false,
-      bestseller: true,
-      offer: true,
-      rating: 4.8,
-      description: "Aromatic basmati rice with tender mutton pieces",
-      preparationTime: "40 min",
-      calories: "380 cal",
-    },
-  ],
-  2: [
-    {
-      id: 1,
-      name: "Masala Dosa",
-      price: 120,
-      veg: true,
-      bestseller: true,
-      offer: false,
-      rating: 4.6,
-      description: "Crispy rice crepe filled with spiced potatoes",
-      preparationTime: "15 min",
-      calories: "180 cal",
-    },
-    {
-      id: 2,
-      name: "Idli Sambhar",
-      price: 100,
-      veg: true,
-      bestseller: false,
-      offer: true,
-      rating: 4.3,
-      description: "Soft rice cakes served with lentil soup",
-      preparationTime: "10 min",
-      calories: "150 cal",
-    },
-  ],
-  3: [
-    {
-      id: 1,
-      name: "Cheese Pizza",
-      price: 250,
-      veg: true,
-      bestseller: true,
-      offer: true,
-      rating: 4.7,
-      description: "Classic pizza with mozzarella cheese and tomato sauce",
-      preparationTime: "25 min",
-      calories: "300 cal",
-    },
-    {
-      id: 2,
-      name: "Pepperoni Pizza",
-      price: 350,
-      veg: false,
-      bestseller: false,
-      offer: false,
-      rating: 4.4,
-      description: "Spicy pepperoni on cheesy pizza base",
-      preparationTime: "25 min",
-      calories: "350 cal",
-    },
-  ],
-};
-
-const restaurantInfo: Record<string, any> = {
-  1: {
-    name: "Spice Garden",
-    rating: 4.5,
-    deliveryTime: "25-30 min",
-    cuisine: "North Indian, Mughlai",
-    image: paneerbutter,
-  },
-  2: {
-    name: "South Delights",
-    rating: 4.3,
-    deliveryTime: "20-25 min",
-    cuisine: "South Indian, Vegetarian",
-    image: paneerbutter,
-  },
-  3: {
-    name: "Pizza Palace",
-    rating: 4.6,
-    deliveryTime: "30-35 min",
-    cuisine: "Italian, Fast Food",
-    image: paneerbutter,
-  },
-};
+const menuData: Record<string, any[]> = {};
 
 export default function MenuPage(): JSX.Element {
   const { id } = useParams();
@@ -152,11 +26,29 @@ export default function MenuPage(): JSX.Element {
   const [sort, setSort] = useState<string>("relevance");
   const [quantity, setQuantity] = useState<Record<number, number>>({});
   const [search, setSearch] = useState<string>("");
+  const [restaurant, setRestaurant] = useState<any>(null);
+  const [menuItems, setMenuItems] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const restaurant = restaurantInfo[id as string] || {
-    name: `Restaurant #${id}`,
-  };
-  let menuItems = menuData[id as string] || [];
+  // Fetch restaurant and menu data from API
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!id) return;
+      try {
+        const [restaurantData, menuData] = await Promise.all([
+          getRestaurantById(id),
+          getRestaurantMenu(id),
+        ]);
+        setRestaurant(restaurantData);
+        setMenuItems(menuData);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching restaurant data:', error);
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, [id]);
 
   const filters = [
     {
@@ -292,13 +184,34 @@ export default function MenuPage(): JSX.Element {
     setSearch("");
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-orange-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-orange-500 border-t-transparent"></div>
+      </div>
+    );
+  }
+
+  if (!restaurant) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-orange-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-700 mb-2">Restaurant not found</h2>
+          <button onClick={() => navigate('/restaurant-list')} className="bg-orange-500 text-white px-6 py-3 rounded-lg">
+            Back to Restaurants
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-orange-50">
       <div className="bg-gradient-to-r from-orange-500 to-red-500 shadow-lg">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
             <img
-              src={restaurant.image}
+              src={restaurant.image || paneerbutter}
               alt={restaurant.name}
               className="w-24 h-24 md:w-32 md:h-32 rounded-2xl object-cover shadow-lg"
             />
@@ -315,7 +228,7 @@ export default function MenuPage(): JSX.Element {
                   <IoFastFood />
                   {restaurant.deliveryTime}
                 </span>
-                <span className="text-white/90">{restaurant.cuisine}</span>
+                <span className="text-white/90">{restaurant.cuisines?.join(', ')}</span>
               </div>
               <p className="text-white/90">
                 Free delivery above ₹299 • 100+ ratings

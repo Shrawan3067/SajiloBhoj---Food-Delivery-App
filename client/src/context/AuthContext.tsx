@@ -1,11 +1,12 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import api from '../services/api';
 
 type User = {
-  id: number | string;
+  _id: string;
   name: string;
   email?: string | null;
   phone?: string | null;
-  token?: string;
+  role?: string;
 };
 
 type AuthContextValue = {
@@ -23,8 +24,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('swiggy_user');
-    if (savedUser) {
+    const token = localStorage.getItem('token');
+    const savedUser = localStorage.getItem('user');
+    if (token && savedUser) {
       try {
         setUser(JSON.parse(savedUser));
       } catch (_) {
@@ -35,44 +37,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = async (emailOrPhone: string, password: string) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const response = await api.post('/auth/login', {
+      emailOrPhone,
+      password,
+    });
 
-    if (password === 'demopassword') {
-      const userData: User = {
-        id: 1,
-        name: 'Demo User',
-        email: emailOrPhone.includes('@') ? emailOrPhone : null,
-        phone: !emailOrPhone.includes('@') ? emailOrPhone : null,
-        token: 'demo_jwt_token_' + Date.now(),
-      };
-
-      setUser(userData);
-      localStorage.setItem('swiggy_user', JSON.stringify(userData));
-      return userData;
-    }
-
-    throw new Error('Invalid credentials');
+    const { token, user: userData } = response.data;
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(userData));
+    setUser(userData);
+    return userData;
   };
 
   const signup = async (name: string, emailOrPhone: string, password: string) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    const userData: User = {
-      id: Date.now(),
+    const response = await api.post('/auth/register', {
       name,
       email: emailOrPhone.includes('@') ? emailOrPhone : null,
       phone: !emailOrPhone.includes('@') ? emailOrPhone : null,
-      token: 'demo_jwt_token_' + Date.now(),
-    };
+      password,
+    });
 
+    const { token, user: userData } = response.data;
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
-    localStorage.setItem('swiggy_user', JSON.stringify(userData));
     return userData;
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('swiggy_user');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
   };
 
   const value: AuthContextValue = { user, isLoading, login, signup, logout };
